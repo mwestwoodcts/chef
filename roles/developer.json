@@ -1,0 +1,18 @@
+{
+  "name" : "developer",
+  "description" : "Standard install for developer machines",
+  "run_list" : [
+      "recipe[sql_server::server]",
+      "recipe[RMS]",
+      "recipe[Jail]"
+  ],
+  "default_attributes" : {
+      "sql_server": {
+        "accept_license_terms" : true,
+        "version" : "2012",
+        "server" : {
+          "checksum" : "7f5e3d40b85fba2da5093e3621435c209c4ac90d34219bab8878e93a787cf29f"
+        }
+      }
+    } 
+}
