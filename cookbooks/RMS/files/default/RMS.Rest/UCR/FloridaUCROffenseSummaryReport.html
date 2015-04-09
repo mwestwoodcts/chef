@@ -1,0 +1,621 @@
+﻿<head>
+    <!-- This is a compatibility setting for IE. It tells IE not to run in compatibility mode.
+        IE Compatibility mode is IE8 which doesn't seem to play nicely with recent versions of AngularJS.
+        -->
+    <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+    <script src="angular-1.3.5.min.js"></script>
+    <script src="ReportPrint.js"></script>
+    <script>
+        smartCOPPrintArguments = "reportPageOne=rotatedPage,reportPageTwo=rotatedPage";
+        var UCRCtrl = function ($scope) {
+            var xmlhttp;
+            if (window.XMLHttpRequest) { // code for IE7+, Firefox, Chrome, Opera, Safari
+                xmlhttp = new XMLHttpRequest();
+            } else { // code for IE6, IE5
+                xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+            }
+            xmlhttp.onreadystatechange = function () {
+                if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+                    $scope.$apply(function () {
+                        $scope.UCRReport = JSON.parse(xmlhttp.response).SubmissionDocument.DocumentObject;
+
+                        // The return value is a JSON string which represents an object which
+                        // contains a JSON string as one of its properties.
+                        // TODO: Write an Inception joke in the comments for this line.
+                        $scope.UCRReport = JSON.parse($scope.UCRReport);
+
+                        $scope.UCRReport.BeginReportingPeriod = dateHelper($scope.UCRReport.BeginReportingPeriod);
+                        $scope.UCRReport.EndReportingPeriod = dateHelper($scope.UCRReport.EndReportingPeriod);
+                    });
+                }
+            }
+
+            var splitLocation = window.location.href.split('/');
+            var url = '';
+            for (var i = 0; i < splitLocation.length - 2; i++) {
+                url += splitLocation[i] + '/';
+            }
+            url += "GetSubmissionDocument" + window.location.search + '&format=json';
+            xmlhttp.open("GET", url, true);
+            xmlhttp.send();
+
+            var dateHelper = function (dateString) {
+                var openParen = dateString.indexOf('(');
+                var closeParen = dateString.indexOf(')');
+                var secondsSinceEpoch = dateString.substring(openParen + 1, closeParen);
+                return new Date(parseInt(secondsSinceEpoch));
+            }
+
+            //$scope.UCRReport = { "AgencyName": "CTS America", "AgencyORI": "CTSA1234", "BeginReportingPeriod": "\/Date(1417463964586-0600)\/", "EndReportingPeriod": "\/Date(1420055964587-0600)\/", "HomicideOffenses": [{ "DomesticViolenceOffenseCount": 6, "DomesticViolenceArrestCount": 5, "VictimRelationshipSpouseCount": 18, "VictimRelationshipParentCount": 16, "VictimRelationshipChildCount": 12, "VictimRelationshipSiblingCount": 17, "VictimRelationshipOtherFamilyCount": 15, "VictimRelationshipCohabitantCount": 13, "VictimRelationshipOtherCount": 14, "TotalValueOfPropertyStolen": 600, "FirearmCount": 8, "KnifeOrCuttingInstrumentCount": 10, "OtherDangerousCount": 11, "HandsFistsFeetCount": 9, "Classification": "Criminal Homicide", "TotalOffenseCount": 7, "ClearancesArrestCount": 2, "ClearancesExceptionCount": 3, "ClearancesAdultCount": 1, "ClearancesJuvenileCount": 4 }, { "DomesticViolenceOffenseCount": 6, "DomesticViolenceArrestCount": 5, "VictimRelationshipSpouseCount": 18, "VictimRelationshipParentCount": 16, "VictimRelationshipChildCount": 12, "VictimRelationshipSiblingCount": 17, "VictimRelationshipOtherFamilyCount": 15, "VictimRelationshipCohabitantCount": 13, "VictimRelationshipOtherCount": 14, "TotalValueOfPropertyStolen": 600, "FirearmCount": 8, "KnifeOrCuttingInstrumentCount": 10, "OtherDangerousCount": 11, "HandsFistsFeetCount": 9, "Classification": "Manslaughter", "TotalOffenseCount": 7, "ClearancesArrestCount": 2, "ClearancesExceptionCount": 3, "ClearancesAdultCount": 1, "ClearancesJuvenileCount": 4 }], "SexualOffenses": [{ "DomesticViolenceOffenseCount": 6, "DomesticViolenceArrestCount": 5, "VictimRelationshipSpouseCount": 18, "VictimRelationshipParentCount": 16, "VictimRelationshipChildCount": 12, "VictimRelationshipSiblingCount": 17, "VictimRelationshipOtherFamilyCount": 15, "VictimRelationshipCohabitantCount": 13, "VictimRelationshipOtherCount": 14, "TotalValueOfPropertyStolen": 600, "FirearmCount": 8, "KnifeOrCuttingInstrumentCount": 10, "OtherDangerousCount": 11, "HandsFistsFeetCount": 9, "Classification": "Forcible Rape, Committed", "TotalOffenseCount": 7, "ClearancesArrestCount": 2, "ClearancesExceptionCount": 3, "ClearancesAdultCount": 1, "ClearancesJuvenileCount": 4 }, { "DomesticViolenceOffenseCount": 6, "DomesticViolenceArrestCount": 5, "VictimRelationshipSpouseCount": 18, "VictimRelationshipParentCount": 16, "VictimRelationshipChildCount": 12, "VictimRelationshipSiblingCount": 17, "VictimRelationshipOtherFamilyCount": 15, "VictimRelationshipCohabitantCount": 13, "VictimRelationshipOtherCount": 14, "TotalValueOfPropertyStolen": 600, "FirearmCount": 8, "KnifeOrCuttingInstrumentCount": 10, "OtherDangerousCount": 11, "HandsFistsFeetCount": 9, "Classification": "Forcible Rape, Attempted", "TotalOffenseCount": 7, "ClearancesArrestCount": 2, "ClearancesExceptionCount": 3, "ClearancesAdultCount": 1, "ClearancesJuvenileCount": 4 }, { "DomesticViolenceOffenseCount": 6, "DomesticViolenceArrestCount": 5, "VictimRelationshipSpouseCount": 18, "VictimRelationshipParentCount": 16, "VictimRelationshipChildCount": 12, "VictimRelationshipSiblingCount": 17, "VictimRelationshipOtherFamilyCount": 15, "VictimRelationshipCohabitantCount": 13, "VictimRelationshipOtherCount": 14, "TotalValueOfPropertyStolen": 600, "FirearmCount": 8, "KnifeOrCuttingInstrumentCount": 10, "OtherDangerousCount": 11, "HandsFistsFeetCount": 9, "Classification": "Forcible Fondling", "TotalOffenseCount": 7, "ClearancesArrestCount": 2, "ClearancesExceptionCount": 3, "ClearancesAdultCount": 1, "ClearancesJuvenileCount": 4 }], "DomesticViolenceOffenseTotal": { "DomesticViolenceOffenseCount": 2, "DomesticViolenceArrestCount": 1, "VictimRelationshipSpouseCount": 9, "VictimRelationshipParentCount": 7, "VictimRelationshipChildCount": 3, "VictimRelationshipSiblingCount": 8, "VictimRelationshipOtherFamilyCount": 6, "VictimRelationshipCohabitantCount": 4, "VictimRelationshipOtherCount": 5 }, "RobberyOffenses": [{ "TotalValueOfPropertyStolen": 600, "FirearmCount": 8, "KnifeOrCuttingInstrumentCount": 10, "OtherDangerousCount": 11, "HandsFistsFeetCount": 9, "Classification": "Highway", "TotalOffenseCount": 7, "ClearancesArrestCount": 2, "ClearancesExceptionCount": 3, "ClearancesAdultCount": 1, "ClearancesJuvenileCount": 4 }, { "TotalValueOfPropertyStolen": 600, "FirearmCount": 8, "KnifeOrCuttingInstrumentCount": 10, "OtherDangerousCount": 11, "HandsFistsFeetCount": 9, "Classification": "Commercial Other", "TotalOffenseCount": 7, "ClearancesArrestCount": 2, "ClearancesExceptionCount": 3, "ClearancesAdultCount": 1, "ClearancesJuvenileCount": 4 }, { "TotalValueOfPropertyStolen": 600, "FirearmCount": 8, "KnifeOrCuttingInstrumentCount": 10, "OtherDangerousCount": 11, "HandsFistsFeetCount": 9, "Classification": "Gas/Service Station", "TotalOffenseCount": 7, "ClearancesArrestCount": 2, "ClearancesExceptionCount": 3, "ClearancesAdultCount": 1, "ClearancesJuvenileCount": 4 }, { "TotalValueOfPropertyStolen": 600, "FirearmCount": 8, "KnifeOrCuttingInstrumentCount": 10, "OtherDangerousCount": 11, "HandsFistsFeetCount": 9, "Classification": "Convenience", "TotalOffenseCount": 7, "ClearancesArrestCount": 2, "ClearancesExceptionCount": 3, "ClearancesAdultCount": 1, "ClearancesJuvenileCount": 4 }, { "TotalValueOfPropertyStolen": 600, "FirearmCount": 8, "KnifeOrCuttingInstrumentCount": 10, "OtherDangerousCount": 11, "HandsFistsFeetCount": 9, "Classification": "Residence", "TotalOffenseCount": 7, "ClearancesArrestCount": 2, "ClearancesExceptionCount": 3, "ClearancesAdultCount": 1, "ClearancesJuvenileCount": 4 }, { "TotalValueOfPropertyStolen": 600, "FirearmCount": 8, "KnifeOrCuttingInstrumentCount": 10, "OtherDangerousCount": 11, "HandsFistsFeetCount": 9, "Classification": "Bank", "TotalOffenseCount": 7, "ClearancesArrestCount": 2, "ClearancesExceptionCount": 3, "ClearancesAdultCount": 1, "ClearancesJuvenileCount": 4 }, { "TotalValueOfPropertyStolen": 600, "FirearmCount": 8, "KnifeOrCuttingInstrumentCount": 10, "OtherDangerousCount": 11, "HandsFistsFeetCount": 9, "Classification": "Miscellaneous", "TotalOffenseCount": 7, "ClearancesArrestCount": 2, "ClearancesExceptionCount": 3, "ClearancesAdultCount": 1, "ClearancesJuvenileCount": 4 }], "AssaultOffenses": [{ "DomesticViolenceOffenseCount": 6, "DomesticViolenceArrestCount": 5, "VictimRelationshipSpouseCount": 18, "VictimRelationshipParentCount": 16, "VictimRelationshipChildCount": 12, "VictimRelationshipSiblingCount": 17, "VictimRelationshipOtherFamilyCount": 15, "VictimRelationshipCohabitantCount": 13, "VictimRelationshipOtherCount": 14, "FirearmCount": 8, "KnifeOrCuttingInstrumentCount": 10, "OtherDangerousCount": 11, "HandsFistsFeetCount": 9, "Classification": "Aggravated", "TotalOffenseCount": 7, "ClearancesArrestCount": 2, "ClearancesExceptionCount": 3, "ClearancesAdultCount": 1, "ClearancesJuvenileCount": 4 }, { "DomesticViolenceOffenseCount": 6, "DomesticViolenceArrestCount": 5, "VictimRelationshipSpouseCount": 18, "VictimRelationshipParentCount": 16, "VictimRelationshipChildCount": 12, "VictimRelationshipSiblingCount": 17, "VictimRelationshipOtherFamilyCount": 15, "VictimRelationshipCohabitantCount": 13, "VictimRelationshipOtherCount": 14, "FirearmCount": 8, "KnifeOrCuttingInstrumentCount": 10, "OtherDangerousCount": 11, "HandsFistsFeetCount": 9, "Classification": "Aggravated Stalking", "TotalOffenseCount": 7, "ClearancesArrestCount": 2, "ClearancesExceptionCount": 3, "ClearancesAdultCount": 1, "ClearancesJuvenileCount": 4 }], "ViolentOffenseTotal": { "DomesticViolenceOffenseCount": 6, "DomesticViolenceArrestCount": 5, "VictimRelationshipSpouseCount": 19, "VictimRelationshipParentCount": 17, "VictimRelationshipChildCount": 13, "VictimRelationshipSiblingCount": 18, "VictimRelationshipOtherFamilyCount": 16, "VictimRelationshipCohabitantCount": 14, "VictimRelationshipOtherCount": 15, "TotalValueOfPropertyStolen": 400, "FirearmCount": 7, "KnifeOrCuttingInstrumentCount": 9, "OtherDangerousCount": 10, "HandsFistsFeetCount": 8, "Classification": "Total Violent", "TotalOffenseCount": 11, "ClearancesArrestCount": 2, "ClearancesExceptionCount": 3, "ClearancesAdultCount": 1, "ClearancesJuvenileCount": 4 }, "SimpleAssaultOffenses": [{ "DomesticViolenceOffenseCount": 6, "DomesticViolenceArrestCount": 5, "VictimRelationshipSpouseCount": 14, "VictimRelationshipParentCount": 12, "VictimRelationshipChildCount": 8, "VictimRelationshipSiblingCount": 13, "VictimRelationshipOtherFamilyCount": 11, "VictimRelationshipCohabitantCount": 9, "VictimRelationshipOtherCount": 10, "HandsFistsFeetCount": 15, "Classification": "Simple", "TotalOffenseCount": 7, "ClearancesArrestCount": 2, "ClearancesExceptionCount": 3, "ClearancesAdultCount": 1, "ClearancesJuvenileCount": 4 }, { "DomesticViolenceOffenseCount": 6, "DomesticViolenceArrestCount": 0, "VictimRelationshipSpouseCount": 14, "VictimRelationshipParentCount": 12, "VictimRelationshipChildCount": 8, "VictimRelationshipSiblingCount": 13, "VictimRelationshipOtherFamilyCount": 11, "VictimRelationshipCohabitantCount": 9, "VictimRelationshipOtherCount": 10, "HandsFistsFeetCount": 0, "Classification": "Threat/Intimidation", "TotalOffenseCount": 0, "ClearancesArrestCount": 0, "ClearancesExceptionCount": 0, "ClearancesAdultCount": 0, "ClearancesJuvenileCount": 0 }, { "DomesticViolenceOffenseCount": 6, "DomesticViolenceArrestCount": 0, "VictimRelationshipSpouseCount": 14, "VictimRelationshipParentCount": 12, "VictimRelationshipChildCount": 8, "VictimRelationshipSiblingCount": 13, "VictimRelationshipOtherFamilyCount": 11, "VictimRelationshipCohabitantCount": 9, "VictimRelationshipOtherCount": 10, "HandsFistsFeetCount": 0, "Classification": "Simple Stalking", "TotalOffenseCount": 0, "ClearancesArrestCount": 0, "ClearancesExceptionCount": 0, "ClearancesAdultCount": 0, "ClearancesJuvenileCount": 0 }], "BurglaryOffenses": [{ "TotalValueOfPropertyStolen": 700, "Classification": "Forcible Entry", "TotalOffenseCount": 7, "ClearancesArrestCount": 2, "ClearancesExceptionCount": 3, "ClearancesAdultCount": 1, "ClearancesJuvenileCount": 4 }, { "TotalValueOfPropertyStolen": 700, "Classification": "Unlawful Entry", "TotalOffenseCount": 7, "ClearancesArrestCount": 2, "ClearancesExceptionCount": 3, "ClearancesAdultCount": 1, "ClearancesJuvenileCount": 4 }, { "TotalValueOfPropertyStolen": 700, "Classification": "Residence", "TotalOffenseCount": 7, "ClearancesArrestCount": 2, "ClearancesExceptionCount": 3, "ClearancesAdultCount": 1, "ClearancesJuvenileCount": 4 }, { "TotalValueOfPropertyStolen": 700, "Classification": "Non-Residence", "TotalOffenseCount": 7, "ClearancesArrestCount": 2, "ClearancesExceptionCount": 3, "ClearancesAdultCount": 1, "ClearancesJuvenileCount": 4 }, { "TotalValueOfPropertyStolen": 700, "Classification": "Attempted", "TotalOffenseCount": 7, "ClearancesArrestCount": 2, "ClearancesExceptionCount": 3, "ClearancesAdultCount": 1, "ClearancesJuvenileCount": 4 }, { "TotalValueOfPropertyStolen": 700, "Classification": "Residence (Night)", "TotalOffenseCount": 7, "ClearancesArrestCount": 2, "ClearancesExceptionCount": 3, "ClearancesAdultCount": 1, "ClearancesJuvenileCount": 4 }, { "TotalValueOfPropertyStolen": 700, "Classification": "Residence (Day)", "TotalOffenseCount": 7, "ClearancesArrestCount": 2, "ClearancesExceptionCount": 3, "ClearancesAdultCount": 1, "ClearancesJuvenileCount": 4 }, { "TotalValueOfPropertyStolen": 700, "Classification": "Residence (Unknown)", "TotalOffenseCount": 7, "ClearancesArrestCount": 2, "ClearancesExceptionCount": 3, "ClearancesAdultCount": 1, "ClearancesJuvenileCount": 4 }, { "TotalValueOfPropertyStolen": 700, "Classification": "Non-Residence (Night)", "TotalOffenseCount": 7, "ClearancesArrestCount": 2, "ClearancesExceptionCount": 3, "ClearancesAdultCount": 1, "ClearancesJuvenileCount": 4 }, { "TotalValueOfPropertyStolen": 700, "Classification": "Non-Residence (Day)", "TotalOffenseCount": 7, "ClearancesArrestCount": 2, "ClearancesExceptionCount": 3, "ClearancesAdultCount": 1, "ClearancesJuvenileCount": 4 }, { "TotalValueOfPropertyStolen": 700, "Classification": "Non-Residence (Unknown)", "TotalOffenseCount": 7, "ClearancesArrestCount": 2, "ClearancesExceptionCount": 3, "ClearancesAdultCount": 1, "ClearancesJuvenileCount": 4 }], "LarcenyOffenses": [{ "TotalValueOfPropertyStolen": 700, "Classification": "Pocket Picking", "TotalOffenseCount": 7, "ClearancesArrestCount": 2, "ClearancesExceptionCount": 3, "ClearancesAdultCount": 1, "ClearancesJuvenileCount": 4 }, { "TotalValueOfPropertyStolen": 700, "Classification": "Purse Snatching", "TotalOffenseCount": 7, "ClearancesArrestCount": 2, "ClearancesExceptionCount": 3, "ClearancesAdultCount": 1, "ClearancesJuvenileCount": 4 }, { "TotalValueOfPropertyStolen": 700, "Classification": "Shoplifting", "TotalOffenseCount": 7, "ClearancesArrestCount": 2, "ClearancesExceptionCount": 3, "ClearancesAdultCount": 1, "ClearancesJuvenileCount": 4 }, { "TotalValueOfPropertyStolen": 700, "Classification": "From Motor Vehicle", "TotalOffenseCount": 7, "ClearancesArrestCount": 2, "ClearancesExceptionCount": 3, "ClearancesAdultCount": 1, "ClearancesJuvenileCount": 4 }, { "TotalValueOfPropertyStolen": 700, "Classification": "Motor Vehicle Parts", "TotalOffenseCount": 7, "ClearancesArrestCount": 2, "ClearancesExceptionCount": 3, "ClearancesAdultCount": 1, "ClearancesJuvenileCount": 4 }, { "TotalValueOfPropertyStolen": 700, "Classification": "Bicycles", "TotalOffenseCount": 7, "ClearancesArrestCount": 2, "ClearancesExceptionCount": 3, "ClearancesAdultCount": 1, "ClearancesJuvenileCount": 4 }, { "TotalValueOfPropertyStolen": 700, "Classification": "From Building", "TotalOffenseCount": 7, "ClearancesArrestCount": 2, "ClearancesExceptionCount": 3, "ClearancesAdultCount": 1, "ClearancesJuvenileCount": 4 }, { "TotalValueOfPropertyStolen": 700, "Classification": "From Coin Operating Device", "TotalOffenseCount": 7, "ClearancesArrestCount": 2, "ClearancesExceptionCount": 3, "ClearancesAdultCount": 1, "ClearancesJuvenileCount": 4 }, { "TotalValueOfPropertyStolen": 700, "Classification": "All Other", "TotalOffenseCount": 7, "ClearancesArrestCount": 2, "ClearancesExceptionCount": 3, "ClearancesAdultCount": 1, "ClearancesJuvenileCount": 4 }, { "TotalValueOfPropertyStolen": 700, "Classification": "$200 & Over", "TotalOffenseCount": 7, "ClearancesArrestCount": 2, "ClearancesExceptionCount": 3, "ClearancesAdultCount": 1, "ClearancesJuvenileCount": 4 }, { "TotalValueOfPropertyStolen": 700, "Classification": "$50 - $200", "TotalOffenseCount": 7, "ClearancesArrestCount": 2, "ClearancesExceptionCount": 3, "ClearancesAdultCount": 1, "ClearancesJuvenileCount": 4 }, { "TotalValueOfPropertyStolen": 700, "Classification": "Under $50", "TotalOffenseCount": 7, "ClearancesArrestCount": 2, "ClearancesExceptionCount": 3, "ClearancesAdultCount": 1, "ClearancesJuvenileCount": 4 }], "MotorVehicleTheftOffenses": [{ "TotalValueOfPropertyStolen": 700, "Classification": "Auto", "TotalOffenseCount": 7, "ClearancesArrestCount": 2, "ClearancesExceptionCount": 3, "ClearancesAdultCount": 1, "ClearancesJuvenileCount": 4 }, { "TotalValueOfPropertyStolen": 700, "Classification": "Trucks & Buses", "TotalOffenseCount": 7, "ClearancesArrestCount": 2, "ClearancesExceptionCount": 3, "ClearancesAdultCount": 1, "ClearancesJuvenileCount": 4 }, { "TotalValueOfPropertyStolen": 700, "Classification": "Motorcycles", "TotalOffenseCount": 7, "ClearancesArrestCount": 2, "ClearancesExceptionCount": 3, "ClearancesAdultCount": 1, "ClearancesJuvenileCount": 4 }, { "TotalValueOfPropertyStolen": 700, "Classification": "Other Vehicles", "TotalOffenseCount": 7, "ClearancesArrestCount": 2, "ClearancesExceptionCount": 3, "ClearancesAdultCount": 1, "ClearancesJuvenileCount": 4 }], "UnarmedTheftNonviolentTotal": { "TotalValueOfPropertyStolen": 777.77, "Classification": "Non-violent Offense Total", "TotalOffenseCount": 5, "ClearancesArrestCount": 2, "ClearancesExceptionCount": 3, "ClearancesAdultCount": 1, "ClearancesJuvenileCount": 4 }, "UnarmedTheftTotal": { "TotalValueOfPropertyStolen": 888.88, "Classification": "Offense Total", "TotalOffenseCount": 5, "ClearancesArrestCount": 2, "ClearancesExceptionCount": 3, "ClearancesAdultCount": 1, "ClearancesJuvenileCount": 4 }, "ArsonOffenses": [{ "Location": "Single Occupant Residence", "TotalInhabited": 6, "TotalAbandoned": 3, "TotalAttempted": 4, "TotalDollarLoss": 500, "AdultCount": 1, "JuvenileCount": 2 }, { "Location": "Other Residence", "TotalInhabited": 6, "TotalAbandoned": 3, "TotalAttempted": 4, "TotalDollarLoss": 500, "AdultCount": 1, "JuvenileCount": 2 }, { "Location": "Storage", "TotalInhabited": 6, "TotalAbandoned": 3, "TotalAttempted": 4, "TotalDollarLoss": 500, "AdultCount": 1, "JuvenileCount": 2 }, { "Location": "Industrial/Manufacturing", "TotalInhabited": 6, "TotalAbandoned": 3, "TotalAttempted": 4, "TotalDollarLoss": 500, "AdultCount": 1, "JuvenileCount": 2 }, { "Location": "Commercial", "TotalInhabited": 6, "TotalAbandoned": 3, "TotalAttempted": 4, "TotalDollarLoss": 500, "AdultCount": 1, "JuvenileCount": 2 }, { "Location": "Community/Public", "TotalInhabited": 6, "TotalAbandoned": 3, "TotalAttempted": 4, "TotalDollarLoss": 500, "AdultCount": 1, "JuvenileCount": 2 }, { "Location": "All Other Structures", "TotalInhabited": 6, "TotalAbandoned": 3, "TotalAttempted": 4, "TotalDollarLoss": 500, "AdultCount": 1, "JuvenileCount": 2 }, { "Location": "Motor Vehicles", "TotalInhabited": 6, "TotalAbandoned": 3, "TotalAttempted": 4, "TotalDollarLoss": 500, "AdultCount": 1, "JuvenileCount": 2 }, { "Location": "Other Mobile", "TotalInhabited": 6, "TotalAbandoned": 3, "TotalAttempted": 4, "TotalDollarLoss": 500, "AdultCount": 1, "JuvenileCount": 2 }, { "Location": "Other", "TotalInhabited": 6, "TotalAbandoned": 3, "TotalAttempted": 4, "TotalDollarLoss": 500, "AdultCount": 1, "JuvenileCount": 2 }, { "Location": "Total", "TotalInhabited": 6, "TotalAbandoned": 3, "TotalAttempted": 4, "TotalDollarLoss": 500, "AdultCount": 1, "JuvenileCount": 2 }], "ArsonTotal": { "Location": "Total", "TotalInhabited": 5, "TotalAbandoned": 3, "TotalAttempted": 4, "TotalDollarLoss": 250, "AdultCount": 1, "JuvenileCount": 2 }, "StolenPropertyValues": [{ "PropertyType": "Currency, Note, etc.", "StolenValue": 600, "RecoveredValue": 500 }, { "PropertyType": "Jewelry, Precious Metals", "StolenValue": 600, "RecoveredValue": 500 }, { "PropertyType": "Clothing & Furs", "StolenValue": 600, "RecoveredValue": 500 }, { "PropertyType": "Motor Vehicles", "StolenValue": 600, "RecoveredValue": 500 }, { "PropertyType": "Automobiles", "StolenValue": 600, "RecoveredValue": 500 }, { "PropertyType": "Trucks & Buses", "StolenValue": 600, "RecoveredValue": 500 }, { "PropertyType": "Motorcycles", "StolenValue": 600, "RecoveredValue": 500 }, { "PropertyType": "Other Vehicles", "StolenValue": 600, "RecoveredValue": 500 }, { "PropertyType": "Office Equipment", "StolenValue": 600, "RecoveredValue": 500 }, { "PropertyType": "Firearms", "StolenValue": 600, "RecoveredValue": 500 }, { "PropertyType": "Household Goods", "StolenValue": 600, "RecoveredValue": 500 }, { "PropertyType": "Consumable Goods", "StolenValue": 600, "RecoveredValue": 500 }, { "PropertyType": "Livestock", "StolenValue": 600, "RecoveredValue": 500 }, { "PropertyType": "Miscellaneous", "StolenValue": 600, "RecoveredValue": 500 }], "StolenPropertyTotal": { "PropertyType": "Total", "StolenValue": 650, "RecoveredValue": 500 }, "StolenVehiclesRecovered": { "StolenAndRecoveredLocally": 5, "StolenLocallyAndRecoveredByOtherJurisdiction": 15, "StolenInOtherJurisdictionAndRecoveredLocally": 10 } };
+            //$scope.UCRReport.BeginReportingPeriod = dateHelper($scope.UCRReport.BeginReportingPeriod);
+            //$scope.UCRReport.EndReportingPeriod = dateHelper($scope.UCRReport.EndReportingPeriod);
+        }
+
+        var UCRApp = angular.module('UCRApp', []);
+
+        UCRApp.controller('UCRCtrl', ['$scope', UCRCtrl]);
+    </script>
+    <style>
+        body {
+            font: 12px arial, sans-serif;
+        }
+
+        table {
+            font: 12px arial, sans-serif;
+        }
+
+        td {
+            border: solid 1px black;
+            text-align: center;
+        }
+
+        table {
+            border-spacing: 0px;
+            border-collapse: collapse;
+        }
+
+        th {
+            border: solid 1px;
+            background-color: #AAAAAA;
+            vertical-align: bottom;
+            padding: 2px;
+            box-shadow: inset 0 0 0 1000px #AAAAAA;
+        }
+
+        .noBorder {
+            border: 0px;
+        }
+
+        .rightBorder {
+            border-left: 0px;
+            border-top: 0px;
+            border-bottom: 0px;
+            border-right: 1px solid black;
+        }
+
+        .blackBorder {
+            color: #FFFFFF;
+            border: solid 0px;
+            background-color: #000000;
+            box-shadow: inset 0 0 0 1000px #000000;
+            border-bottom: 2px solid black;
+        }
+
+        .greyedOut {
+            background-color: #888888;
+            box-shadow: inset 0 0 0 1000px #888888;
+        }
+
+        .rotated {
+            -webkit-transform: rotate(270deg);
+            -moz-transform: rotate(270deg);
+            writing-mode: bt-lr;
+            white-space: nowrap;
+        }
+
+        .bigLabel {
+            font: 14px arial, sans-serif;
+        }
+
+        .underlinedText {
+            border-bottom: 2px solid;
+            padding: 2px 20px 3px 20px;
+        }
+
+        .center {
+            width: 90%;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .third {
+            float: left;
+            width: 33%;
+        }
+
+        .bigSpaceBottom {
+            margin-bottom: 15px;
+        }
+
+        .clearfix {
+            overflow: auto;
+        }
+
+        .leftAlign {
+            float: left;
+        }
+
+        .arsonTable {
+            width: 565px;
+        }
+
+        .stolenPropertyTable {
+            width: 350px;
+            height: 366px;
+        }
+
+        .vehicleRecoveryTable {
+            width: 215px;
+            height: 366px;
+        }
+
+        .secondOffenseTable {
+            width: 550px;
+            height: 600px;
+        }
+
+        .reportPage {
+            height: 1150px;
+            width: 1150px;
+            margin-bottom: 10px;
+        }
+
+        .rotatedPage {
+            position: relative;
+            left: -250px;
+
+            -webkit-transform: rotate(90deg); /* Safari and Chrome */
+            -moz-transform: rotate(90deg); /* Firefox */
+            -ms-transform: rotate(90deg); /* IE 9 */
+            -o-transform: rotate(90deg); /* Opera */
+            transform: rotate(90deg);
+        }
+
+        @media print {
+            .pageBreakAfter {
+                page-break-after: always;
+            }
+        }
+    </style>
+</head>
+<body ng-app="UCRApp" ng-controller="UCRCtrl">
+    <div id="reportPageOne" class="reportPage pageBreakAfter">
+        <h2 style="text-align: center;">Uniform Crime Reports Offense Form</h2>
+        <div class="bigSpaceBottom">
+            <div class="third">
+                <div class="center">
+                    <label class="bigLabel">Agency Name</label>
+                    <span class="underlinedText">{{UCRReport.AgencyName}}</span>
+                </div>
+            </div>
+            <div class="third">
+                <div class="center">
+                    <label class="bigLabel">Agency ORI</label>
+                    <span class="underlinedText">{{UCRReport.AgencyORI}}</span>
+                </div>
+            </div>
+            <div class="third">
+                <div class="center">
+                    <label class="bigLabel">Reporting Period</label>
+                    <span class="underlinedText">{{UCRReport.BeginReportingPeriod | date}} - {{UCRReport.EndReportingPeriod | date}}</span>
+                </div>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+        <br />
+        <table>
+            <thead>
+                <colgroup>
+                    <col />
+                    <col />
+                    <col style="width: 100px;" />
+                </colgroup>
+                <tr>
+                    <th rowspan="2" colspan="2">Classification of Offenses</th>
+                    <th rowspan="2">Total Number of Offenses</th>
+                    <th colspan="4">Total Clearances</th>
+                    <th rowspan="2">Total Value Property Stolen</th>
+                    <th colspan="4">Weapon</th>
+                    <th class="blackBorder"></th>
+                    <th rowspan="2">Offenses</th>
+                    <th colspan="7">Relationship of Victim to Offender</th>
+                    <th rowspan="2">Arrests</th>
+                </tr>
+                <tr>
+                    <th>Arrest</th>
+                    <th>Exception</th>
+                    <th>Adult</th>
+                    <th>Juvenile</th>
+
+                    <th>Firearm</th>
+                    <th>Knife/ Cutting Inst.</th>
+                    <th>Other Dangerous</th>
+                    <th>Hands, Fists, Feet</th>
+
+                    <th class="blackBorder"></th>
+                    <th>Spouse</th>
+                    <th>Parent</th>
+                    <th>Child</th>
+                    <th>Sibling</th>
+                    <th>Other Family</th>
+                    <th>Cohabitant</th>
+                    <th>Other</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr style="height: 40px;" ng-repeat="offense in UCRReport.HomicideOffenses">
+                    <th rowspan="{{UCRReport.HomicideOffenses.length}}" ng-show="$index == 0">
+                        <div class="rotated" style="width: 18px; height: 20px">Murder</div>
+                    </th>
+                    <td>{{offense.Classification}}</td>
+                    <td>{{offense.TotalOffenseCount}}</td>
+                    <td>{{offense.ClearancesArrestCount}}</td>
+                    <td>{{offense.ClearancesExceptionCount}}</td>
+                    <td>{{offense.ClearancesAdultCount}}</td>
+                    <td>{{offense.ClearancesJuvenileCount}}</td>
+                    <td>{{offense.TotalValueOfPropertyStolen | number: 2}}</td>
+                    <td>{{offense.FirearmCount}}</td>
+                    <td>{{offense.KnifeOrCuttingInstrumentCount}}</td>
+                    <td>{{offense.OtherDangerousCount}}</td>
+                    <td>{{offense.HandsFistsFeetCount}}</td>
+                    <td rowspan="19" class="blackBorder" ng-show="$index == 0">
+                        <div class="rotated" style="width: 18px; height: 20px">DOMESTIC VIOLENCE</div>
+                    </td>
+                    <td>{{offense.DomesticViolenceOffenseCount}}</td>
+                    <td>{{offense.VictimRelationshipSpouseCount}}</td>
+                    <td>{{offense.VictimRelationshipParentCount}}</td>
+                    <td>{{offense.VictimRelationshipChildCount}}</td>
+                    <td>{{offense.VictimRelationshipSiblingCount}}</td>
+                    <td>{{offense.VictimRelationshipOtherFamilyCount}}</td>
+                    <td>{{offense.VictimRelationshipCohabitantCount}}</td>
+                    <td>{{offense.VictimRelationshipOtherCount}}</td>
+                    <td>{{offense.DomesticViolenceArrestCount}}</td>
+                </tr>
+                <tr style="height: 40px;" ng-repeat="offense in UCRReport.SexualOffenses">
+                    <th rowspan="{{UCRReport.SexualOffenses.length}}" ng-show="$index == 0">
+                        <div class="rotated" style="width: 18px; height: 20px">Sex</div>
+                    </th>
+                    <td>{{offense.Classification}}</td>
+                    <td>{{offense.TotalOffenseCount}}</td>
+                    <td>{{offense.ClearancesArrestCount}}</td>
+                    <td>{{offense.ClearancesExceptionCount}}</td>
+                    <td>{{offense.ClearancesAdultCount}}</td>
+                    <td>{{offense.ClearancesJuvenileCount}}</td>
+                    <td>{{offense.TotalValueOfPropertyStolen | number: 2}}</td>
+                    <td>{{offense.FirearmCount}}</td>
+                    <td>{{offense.KnifeOrCuttingInstrumentCount}}</td>
+                    <td>{{offense.OtherDangerousCount}}</td>
+                    <td>{{offense.HandsFistsFeetCount}}</td>
+
+                    <td>{{offense.DomesticViolenceOffenseCount}}</td>
+                    <td>{{offense.VictimRelationshipSpouseCount}}</td>
+                    <td>{{offense.VictimRelationshipParentCount}}</td>
+                    <td>{{offense.VictimRelationshipChildCount}}</td>
+                    <td>{{offense.VictimRelationshipSiblingCount}}</td>
+                    <td>{{offense.VictimRelationshipOtherFamilyCount}}</td>
+                    <td>{{offense.VictimRelationshipCohabitantCount}}</td>
+                    <td>{{offense.VictimRelationshipOtherCount}}</td>
+                    <td>{{offense.DomesticViolenceArrestCount}}</td>
+                </tr>
+                <tr style="height: 40px;" ng-repeat="offense in UCRReport.RobberyOffenses">
+                    <th rowspan="{{UCRReport.RobberyOffenses.length}}" ng-show="$index == 0">
+                        <div class="rotated" style="height: 18px; width: 18px;">Robbery</div>
+                    </th>
+                    <td>{{offense.Classification}}</td>
+                    <td>{{offense.TotalOffenseCount}}</td>
+                    <td>{{offense.ClearancesArrestCount}}</td>
+                    <td>{{offense.ClearancesExceptionCount}}</td>
+                    <td>{{offense.ClearancesAdultCount}}</td>
+                    <td>{{offense.ClearancesJuvenileCount}}</td>
+                    <td>{{offense.TotalValueOfPropertyStolen | number: 2}}</td>
+                    <td>{{offense.FirearmCount}}</td>
+                    <td>{{offense.KnifeOrCuttingInstrumentCount}}</td>
+                    <td>{{offense.OtherDangerousCount}}</td>
+                    <td>{{offense.HandsFistsFeetCount}}</td>
+
+                    <td class="greyedOut noBorder"></td>
+                    <td class="greyedOut noBorder"></td>
+                    <td class="greyedOut noBorder"></td>
+                    <td class="greyedOut noBorder"></td>
+                    <td class="greyedOut noBorder"></td>
+                    <td class="greyedOut noBorder"></td>
+                    <td class="greyedOut noBorder"></td>
+                    <td class="greyedOut noBorder"></td>
+                    <td class="greyedOut rightBorder"></td>
+                </tr>
+                <tr style="height: 40px;" ng-repeat="offense in UCRReport.AssaultOffenses">
+                    <th rowspan="{{UCRReport.AssaultOffenses.length}}" ng-show="$index == 0">
+                        <div class="rotated" style="width: 18px; height: 20px">Assault</div>
+                    </th>
+                    <td>{{offense.Classification}}</td>
+                    <td>{{offense.TotalOffenseCount}}</td>
+                    <td>{{offense.ClearancesArrestCount}}</td>
+                    <td>{{offense.ClearancesExceptionCount}}</td>
+                    <td>{{offense.ClearancesAdultCount}}</td>
+                    <td>{{offense.ClearancesJuvenileCount}}</td>
+                    <td class="greyedOut"></td>
+                    <td>{{offense.FirearmCount}}</td>
+                    <td>{{offense.KnifeOrCuttingInstrumentCount}}</td>
+                    <td>{{offense.OtherDangerousCount}}</td>
+                    <td>{{offense.HandsFistsFeetCount}}</td>
+
+                    <td>{{offense.DomesticViolenceOffenseCount}}</td>
+                    <td>{{offense.VictimRelationshipSpouseCount}}</td>
+                    <td>{{offense.VictimRelationshipParentCount}}</td>
+                    <td>{{offense.VictimRelationshipChildCount}}</td>
+                    <td>{{offense.VictimRelationshipSiblingCount}}</td>
+                    <td>{{offense.VictimRelationshipOtherFamilyCount}}</td>
+                    <td>{{offense.VictimRelationshipCohabitantCount}}</td>
+                    <td>{{offense.VictimRelationshipOtherCount}}</td>
+                    <td>{{offense.DomesticViolenceArrestCount}}</td>
+                </tr>
+                <tr style="height: 40px;">
+                    <td colspan="2">{{UCRReport.ViolentOffenseTotal.Classification}}</td>
+                    <td>{{UCRReport.ViolentOffenseTotal.TotalOffenseCount}}</td>
+                    <td>{{UCRReport.ViolentOffenseTotal.ClearancesArrestCount}}</td>
+                    <td>{{UCRReport.ViolentOffenseTotal.ClearancesExceptionCount}}</td>
+                    <td>{{UCRReport.ViolentOffenseTotal.ClearancesAdultCount}}</td>
+                    <td>{{UCRReport.ViolentOffenseTotal.ClearancesJuvenileCount}}</td>
+                    <td>{{UCRReport.ViolentOffenseTotal.TotalValueOfPropertyStolen | number: 2}}</td>
+                    <td>{{UCRReport.ViolentOffenseTotal.FirearmCount}}</td>
+                    <td>{{UCRReport.ViolentOffenseTotal.KnifeOrCuttingInstrumentCount}}</td>
+                    <td>{{UCRReport.ViolentOffenseTotal.OtherDangerousCount}}</td>
+                    <td>{{UCRReport.ViolentOffenseTotal.HandsFistsFeetCount}}</td>
+
+                    <td>{{UCRReport.ViolentOffenseTotal.DomesticViolenceOffenseCount}}</td>
+                    <td>{{UCRReport.ViolentOffenseTotal.VictimRelationshipSpouseCount}}</td>
+                    <td>{{UCRReport.ViolentOffenseTotal.VictimRelationshipParentCount}}</td>
+                    <td>{{UCRReport.ViolentOffenseTotal.VictimRelationshipChildCount}}</td>
+                    <td>{{UCRReport.ViolentOffenseTotal.VictimRelationshipSiblingCount}}</td>
+                    <td>{{UCRReport.ViolentOffenseTotal.VictimRelationshipOtherFamilyCount}}</td>
+                    <td>{{UCRReport.ViolentOffenseTotal.VictimRelationshipCohabitantCount}}</td>
+                    <td>{{UCRReport.ViolentOffenseTotal.VictimRelationshipOtherCount}}</td>
+                    <td>{{UCRReport.ViolentOffenseTotal.DomesticViolenceArrestCount}}</td>
+                </tr>
+                <tr style="height: 40px;" ng-repeat="offense in UCRReport.SimpleAssaultOffenses">
+                    <th rowspan="{{UCRReport.SimpleAssaultOffenses.length}}" ng-show="$index == 0">
+                        <div class="rotated" style="width: 18px; height: 20px">Simple</div>
+                    </th>
+                    <td>{{offense.Classification}}</td>
+                    <td ng-show="offense.TotalOffenseCount == 0" class="greyedOut"></td>
+                    <td ng-hide="offense.TotalOffenseCount == 0">{{offense.TotalOffenseCount}}</td>
+                    <td ng-show="offense.ClearancesArrestCount == 0" class="greyedOut"></td>
+                    <td ng-hide="offense.ClearancesArrestCount == 0">{{offense.ClearancesArrestCount}}</td>
+                    <td ng-show="offense.ClearancesExceptionCount == 0" class="greyedOut"></td>
+                    <td ng-hide="offense.ClearancesExceptionCount == 0">{{offense.ClearancesExceptionCount}}</td>
+                    <td ng-show="offense.ClearancesAdultCount == 0" class="greyedOut"></td>
+                    <td ng-hide="offense.ClearancesAdultCount == 0">{{offense.ClearancesAdultCount}}</td>
+                    <td ng-show="offense.ClearancesJuvenileCount == 0" class="greyedOut"></td>
+                    <td ng-hide="offense.ClearancesJuvenileCount == 0">{{offense.ClearancesJuvenileCount}}</td>
+                    <td class="greyedOut"></td>
+                    <td class="greyedOut"></td>
+                    <td class="greyedOut"></td>
+                    <td class="greyedOut"></td>
+                    <td ng-show="offense.HandsFistsFeetCount == 0" class="greyedOut"></td>
+                    <td ng-hide="offense.HandsFistsFeetCount == 0">{{offense.HandsFistsFeetCount}}</td>
+
+                    <td>{{offense.DomesticViolenceOffenseCount}}</td>
+                    <td>{{offense.VictimRelationshipSpouseCount}}</td>
+                    <td>{{offense.VictimRelationshipParentCount}}</td>
+                    <td>{{offense.VictimRelationshipChildCount}}</td>
+                    <td>{{offense.VictimRelationshipSiblingCount}}</td>
+                    <td>{{offense.VictimRelationshipOtherFamilyCount}}</td>
+                    <td>{{offense.VictimRelationshipCohabitantCount}}</td>
+                    <td>{{offense.VictimRelationshipOtherCount}}</td>
+                    <td>{{offense.DomesticViolenceArrestCount}}</td>
+                </tr>
+                <tr>
+                    <td colspan="7" class="noBorder"></td>
+                    <td colspan="5">Total Domestic Violence</td>
+                    <td>{{UCRReport.DomesticViolenceOffenseTotal.DomesticViolenceOffenseCount}}</td>
+                    <td>{{UCRReport.DomesticViolenceOffenseTotal.VictimRelationshipSpouseCount}}</td>
+                    <td>{{UCRReport.DomesticViolenceOffenseTotal.VictimRelationshipParentCount}}</td>
+                    <td>{{UCRReport.DomesticViolenceOffenseTotal.VictimRelationshipChildCount}}</td>
+                    <td>{{UCRReport.DomesticViolenceOffenseTotal.VictimRelationshipSiblingCount}}</td>
+                    <td>{{UCRReport.DomesticViolenceOffenseTotal.VictimRelationshipOtherFamilyCount}}</td>
+                    <td>{{UCRReport.DomesticViolenceOffenseTotal.VictimRelationshipCohabitantCount}}</td>
+                    <td>{{UCRReport.DomesticViolenceOffenseTotal.VictimRelationshipOtherCount}}</td>
+                    <td>{{UCRReport.DomesticViolenceOffenseTotal.DomesticViolenceArrestCount}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div id="reportPageTwo" class="reportPage">
+        <h2 style="text-align: center;">Uniform Crime Reports Offense Form</h2>
+        <div class="bigSpaceBottom">
+
+        </div>
+        <div class="leftAlign">
+            <table class="secondOffenseTable">
+                <thead>
+                    <colgroup>
+                        <col />
+                        <col />
+                        <col style="width: 100px;" />
+                    </colgroup>
+                    <tr>
+                        <th rowspan="3" colspan="2">Classification of Offenses</th>
+                        <th rowspan="3">Total Number of Offenses</th>
+                        <th colspan="4">Total Clearances</th>
+                        <th rowspan="3">Total Value Property Stolen</th>
+                        <th class="blackBorder"></th>
+                    </tr>
+                    <tr style="height: 27px;">
+                        <th rowspan="2">Arrests</th>
+                        <th rowspan="2">Exception</th>
+                        <th rowspan="2">Adult</th>
+                        <th rowspan="2">Juvenile</th>
+                        <th rowspan="2" class="blackBorder"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="burglary in UCRReport.BurglaryOffenses">
+                        <th rowspan="{{UCRReport.BurglaryOffenses.length}}" ng-show="$index == 0">
+                            <div class="rotated" style="width: 18px; height: 20px">Burglary</div>
+                        </th>
+                        <td><small>{{burglary.Classification}}</small></td>
+                        <td>{{burglary.TotalOffenseCount}}</td>
+                        <td>{{burglary.ClearancesArrestCount}}</td>
+                        <td>{{burglary.ClearancesExceptionCount}}</td>
+                        <td>{{burglary.ClearancesAdultCount}}</td>
+                        <td>{{burglary.ClearancesJuvenileCount}}</td>
+                        <td>{{burglary.TotalValueOfPropertyStolen}}</td>
+                        <td class="blackBorder"></td>
+                    </tr>
+                    <tr ng-repeat="larceny in UCRReport.LarcenyOffenses">
+                        <th rowspan="{{UCRReport.LarcenyOffenses.length}}" ng-show="$index == 0">
+                            <div class="rotated" style="width: 18px; height: 20px">Larceny</div>
+                        </th>
+                        <td><small>{{larceny.Classification}}</small></td>
+                        <td>{{larceny.TotalOffenseCount}}</td>
+                        <td>{{larceny.ClearancesArrestCount}}</td>
+                        <td>{{larceny.ClearancesExceptionCount}}</td>
+                        <td>{{larceny.ClearancesAdultCount}}</td>
+                        <td>{{larceny.ClearancesJuvenileCount}}</td>
+                        <td>{{larceny.TotalValueOfPropertyStolen}}</td>
+                        <td class="blackBorder"></td>
+                    </tr>
+                    <tr ng-repeat="mvt in UCRReport.MotorVehicleTheftOffenses">
+                        <th rowspan="{{UCRReport.MotorVehicleTheftOffenses.length}}" ng-show="$index == 0">
+                            <div class="rotated" style="width: 18px; height: 20px">
+                                <p style="font-size: 10px">Motor Veh.<br />Theft</p>
+                            </div>
+                        </th>
+                        <td><small>{{mvt.Classification}}</small></td>
+                        <td>{{mvt.TotalOffenseCount}}</td>
+                        <td>{{mvt.ClearancesArrestCount}}</td>
+                        <td>{{mvt.ClearancesExceptionCount}}</td>
+                        <td>{{mvt.ClearancesAdultCount}}</td>
+                        <td>{{mvt.ClearancesJuvenileCount}}</td>
+                        <td>{{mvt.TotalValueOfPropertyStolen}}</td>
+                        <td class="blackBorder"></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2"><b>Total Non-Violent</b></td>
+                        <td><small>{{UCRReport.UnarmedTheftNonviolentTotal.TotalOffenseCount}}</small></td>
+                        <td>{{UCRReport.UnarmedTheftNonviolentTotal.ClearancesArrestCount}}</td>
+                        <td>{{UCRReport.UnarmedTheftNonviolentTotal.ClearancesExceptionCount}}</td>
+                        <td>{{UCRReport.UnarmedTheftNonviolentTotal.ClearancesAdultCount}}</td>
+                        <td>{{UCRReport.UnarmedTheftNonviolentTotal.ClearancesJuvenileCount}}</td>
+                        <td>{{UCRReport.UnarmedTheftNonviolentTotal.TotalValueOfPropertyStolen}}</td>
+                        <td class="blackBorder"></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2"><b>Total Offenses</b></td>
+                        <td>{{UCRReport.UnarmedTheftTotal.TotalOffenseCount}}</td>
+                        <td>{{UCRReport.UnarmedTheftTotal.ClearancesArrestCount}}</td>
+                        <td>{{UCRReport.UnarmedTheftTotal.ClearancesExceptionCount}}</td>
+                        <td>{{UCRReport.UnarmedTheftTotal.ClearancesAdultCount}}</td>
+                        <td>{{UCRReport.UnarmedTheftTotal.ClearancesJuvenileCount}}</td>
+                        <td>{{UCRReport.UnarmedTheftTotal.TotalValueOfPropertyStolen}}</td>
+                        <td class="blackBorder"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="leftAlign">
+            <table class="arsonTable">
+                <thead>
+                    <colgroup>
+                        <col />
+                        <col />
+                        <col style="width: 100px;" />
+                        <col />
+                        <col />
+                    </colgroup>
+                    <tr>
+                        <th colspan="7">Arson</th>
+                    </tr>
+                    <tr>
+                        <th rowspan="2">Location</th>
+                        <th rowspan="2">Total Inhabited</th>
+                        <th rowspan="2">Total Abandoned</th>
+                        <th rowspan="2">Attempted</th>
+                        <th rowspan="2">Total Dollar Loss</th>
+                        <th colspan="2">Clearances</th>
+                    </tr>
+                    <tr>
+                        <th>Adult</th>
+                        <th>Juv</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="arson in UCRReport.ArsonOffenses">
+                        <td><small>{{arson.Location}}</small></td>
+                        <td>{{arson.TotalInhabited}}</td>
+                        <td>{{arson.TotalAbandoned}}</td>
+                        <td>{{arson.TotalAttempted}}</td>
+                        <td>{{arson.TotalDollarLoss}}</td>
+                        <td>{{arson.AdultCount}}</td>
+                        <td>{{arson.JuvenileCount}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="leftAlign">
+            <table class="stolenPropertyTable">
+                <thead>
+                    <colgroup>
+                        <col />
+                        <col />
+                        <col />
+                    </colgroup>
+                    <tr>
+                        <td style="height: 30px" colspan="3"><b>Property Information/Values</b></td>
+                    </tr>
+                    <tr>
+                        <td><b>Type Property</b></td>
+                        <td><b>Stolen Value</b></td>
+                        <td><b>Recovered Value</b></td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="arson in UCRReport.StolenPropertyValues">
+                        <td><small>{{arson.PropertyType}}</small></td>
+                        <td>{{arson.StolenValue}}</td>
+                        <td>{{arson.RecoveredValue}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="leftAlign">
+            <table class="vehicleRecoveryTable" width="265">
+                <tbody>
+                    <tr>
+                        <td style="height: 115px" colspan="2"><b>Vehicle Recovery</b></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>Number</td>
+                    </tr>
+                    <tr>
+                        <td><small>Stolen Locally and Recovered Locally</small></td>
+                        <td>{{UCRReport.StolenVehiclesRecovered.StolenAndRecoveredLocally}}</td>
+                    </tr>
+                    <tr>
+                        <td><small>Stolen Locally and Recovered by Other Jurisdiction</small></td>
+                        <td>{{UCRReport.StolenVehiclesRecovered.StolenLocallyAndRecoveredByOtherJurisdiction}}</td>
+                    </tr>
+                    <tr>
+                        <td><small>Stolen in Other Jurisdiction and Recovered Locally</small></td>
+                        <td>{{UCRReport.StolenVehiclesRecovered.StolenInOtherJurisdictionAndRecoveredLocally}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <br />
+</body>

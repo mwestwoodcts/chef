@@ -1,0 +1,385 @@
+﻿<head>
+	<!-- This is a compatibility setting for IE. It tells IE not to run in compatibility mode.
+		IE Compatibility mode is IE8 which doesn't seem to play nicely with recent versions of AngularJS.
+		-->
+	<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+    <script src="angular-1.3.5.min.js"></script>
+    <script src="ReportPrint.js"></script>
+	<script>
+        smartCOPPrintArguments = "reportPageOne=rotatedPage";
+		var UCRCtrl = function($scope) {
+			/*	var xmlhttp;
+			if (window.XMLHttpRequest) { // code for IE7+, Firefox, Chrome, Opera, Safari
+				xmlhttp = new XMLHttpRequest();
+			} else { // code for IE6, IE5
+				xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+			}
+			xmlhttp.onreadystatechange = function() {
+				if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+					$scope.$apply(function() {
+						$scope.UCRReport = JSON.parse(xmlhttp.response).Report;
+						$scope.UCRReport.BeginReportingPeriod = dateHelper($scope.UCRReport.BeginReportingPeriod);
+						$scope.UCRReport.EndReportingPeriod = dateHelper($scope.UCRReport.EndReportingPeriod);
+					});
+				}
+			}
+			xmlhttp.open("GET", "http://localhost/RMS.Rest/GetUCRReportDetail?format=json", true);
+			xmlhttp.send();*/
+
+			var dateHelper = function(dateString) {
+				var openParen = dateString.indexOf('(');
+				var closeParen = dateString.indexOf(')');
+				var secondsSinceEpoch = dateString.substring(openParen + 1, closeParen);
+				return new Date(parseInt(secondsSinceEpoch));
+			}
+
+			$scope.UCRReport = { "AgencyName": "CTS America", "AgencyORI": "CTSA1234", "BeginReportingPeriod": "\/Date(1419890618449)\/", "EndReportingPeriod": "\/Date(1422482618449)\/", "PreparedBy": "Fakey McNotreal", "TelephoneNumber": "(555) 555-5555", "DatePrepared": "\/Date(1422482618449)\/", "Records": [{ "ReportNumber": "Victim01", "IncidentType": "2", "OfficerActivity": "08", "TypeOfAssignment": "6", "WeaponType": "88", "OfficerWearingBodyArmor": "8", "BodyArmorPreventedSeriousInjury": "1", "OffenderUsedOfficersWeapon": "1", "OfficerAwareOffenderHadWeapon": "0", "FirearmDischargedByOffender": "8", "DistanceInFeet": 15, "FirearmDischargedByOfficer": "8", "OffenderInjured": "1", "ExtentOfOffenderInjuries": "4", "Time": "4:03 PM", "OfficerExperienceInYears": 12, "OfficerAge": 35, "OfficerSex": "M", "OfficerRace": "O", "OffenderAge": 47, "OffenderSex": "U", "OffenderRace": "I", "Cleared": "N" }, { "ReportNumber": "Victim02", "IncidentType": "2", "OfficerActivity": null, "TypeOfAssignment": null, "WeaponType": "88", "OfficerWearingBodyArmor": "8", "BodyArmorPreventedSeriousInjury": "1", "OffenderUsedOfficersWeapon": "1", "OfficerAwareOffenderHadWeapon": "0", "FirearmDischargedByOffender": "8", "DistanceInFeet": 15, "FirearmDischargedByOfficer": "8", "OffenderInjured": null, "ExtentOfOffenderInjuries": null, "Time": "0", "OfficerExperienceInYears": 12, "OfficerAge": 35, "OfficerSex": "M", "OfficerRace": "O", "OffenderAge": 0, "OffenderSex": null, "OffenderRace": null, "Cleared": null }, { "ReportNumber": "Offender02", "IncidentType": null, "OfficerActivity": null, "TypeOfAssignment": null, "WeaponType": null, "OfficerWearingBodyArmor": null, "BodyArmorPreventedSeriousInjury": null, "OffenderUsedOfficersWeapon": "1", "OfficerAwareOffenderHadWeapon": null, "FirearmDischargedByOffender": "8", "DistanceInFeet": 15, "FirearmDischargedByOfficer": null, "OffenderInjured": null, "ExtentOfOffenderInjuries": null, "Time": "0", "OfficerExperienceInYears": 0, "OfficerAge": 0, "OfficerSex": null, "OfficerRace": null, "OffenderAge": 47, "OffenderSex": "U", "OffenderRace": "I", "Cleared": null }] };
+			$scope.UCRReport.BeginReportingPeriod = dateHelper($scope.UCRReport.BeginReportingPeriod);
+			$scope.UCRReport.EndReportingPeriod = dateHelper($scope.UCRReport.EndReportingPeriod);
+			$scope.UCRReport.DatePrepared = dateHelper($scope.UCRReport.DatePrepared);
+		}
+
+		var UCRApp = angular.module('UCRApp', []);
+
+		UCRApp.controller('UCRCtrl', ['$scope', UCRCtrl]);
+	</script>
+	<style>
+		.center {
+			width: 90%;
+			margin-left: auto;
+			margin-right: auto;
+		}
+
+		.bigSpaceBottom {
+			margin-bottom: 15px;
+		}
+
+		.third {
+			float: left;
+			width: 33%;
+		}
+
+		.bigLabel {
+			font: 14px arial, sans-serif;
+		}
+
+		.underlinedText {
+			border-bottom: 2px solid;
+			padding: 2px 20px 3px 20px;
+		}
+
+		body {
+			font: 12px arial, sans-serif;
+		}
+
+		td {
+			border: solid 1px;
+			text-align: center;
+            font: 12px arial, sans-serif;
+		}
+
+		table {
+			border-spacing: 0px;
+			border-collapse: collapse;
+		}
+
+		th {
+			border: solid 1px;
+		}
+
+		.noBorder {
+			border: 0px;
+		}
+
+		.blackBorder {
+			color: #FFFFFF;
+			border: solid 0px;
+			background-color: #000000;
+		}
+
+		.greyedOut {
+			border: solid 0px;
+			background-color: #888888;
+		}
+
+		.divBorder {
+			border: 1px solid black;
+		}
+
+		.rotated {
+			-webkit-transform: rotate(270deg);
+			-moz-transform: rotate(270deg);
+			writing-mode: bt-lr;
+			white-space: nowrap;
+		}
+		.textGreyBackground {
+			background-color: #F0F0F0;
+			font-size: 12px
+		}
+		.largerTextGreyBackground {
+			background-color: #F0F0F0;
+			font-size: 13px
+		}
+
+        .reportPage {
+            height: 1150px;
+            width: 1150px;
+            margin-bottom: 10px;
+        }
+
+        .rotatedPage {
+            position: relative;
+            left: -250px;
+
+            -webkit-transform: rotate(90deg); /* Safari and Chrome */
+            -moz-transform: rotate(90deg); /* Firefox */
+            -ms-transform: rotate(90deg); /* IE 9 */
+            -o-transform: rotate(90deg); /* Opera */
+            transform: rotate(90deg);
+        }
+
+        .codesRowOneBox {
+            height: 74px;
+            float: left;
+        }
+
+        .codesRowTwoBox {
+            height: 74px;
+            float: left;
+        }
+
+        .codesRowThreeBox {
+            height: 70px;
+            float: left;
+        }
+	</style>
+</head>
+<body ng-app="UCRApp" ng-controller="UCRCtrl">
+    <div id="reportPageOne" class="reportPage">
+        <h2 style="text-align: center;">
+            Uniform Crime Reports Supplemental Homicide Report
+        </h2>
+        <div class="bigSpaceBottom">
+            <div class="third">
+                <div class="center">
+                    <label class="bigLabel">Agency Name</label>
+                    <span class="underlinedText">{{UCRReport.AgencyName}}</span>
+                </div>
+            </div>
+            <div class="third">
+                <div class="center">
+                    <label class="bigLabel">Agency ORI</label>
+                    <span class="underlinedText">{{UCRReport.AgencyORI}}</span>
+                </div>
+            </div>
+            <div class="third">
+                <div class="center">
+                    <label class="bigLabel">Reporting Period</label>
+                    <span class="underlinedText">{{UCRReport.BeginReportingPeriod | date}} - {{UCRReport.EndReportingPeriod | date}}</span>
+                </div>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+
+        <br />
+        <br />
+        <br />
+
+        <div style="width: 1150px;">
+            <div class="divBorder" style="float: left; width: 30px; height: 222px">
+                <div class="rotated" style="margin: 105px 0px 0px 0px">Codes</div>
+            </div>
+
+            <div class="divBorder codesRowOneBox" style="width: 10%;">
+                <p align="center" style="margin: 0px"><strong>Sex</strong></p>
+                <span class="textGreyBackground">M- Male</span><br />
+                <span class="textGreyBackground">F- Female</span><br />
+                <span class="textGreyBackground">U- Unknown</span>
+            </div>
+            <div class="divBorder codesRowOneBox" style="width: 14%;">
+                <p align="center" style="margin: 0px"><strong>Race</strong></p>
+                <div style="float: left; width: 50%">
+                    <span class="textGreyBackground">W- White</span><br />
+                    <span class="textGreyBackground">B- Black</span><br />
+                    <span class="textGreyBackground">I- American<br />Indian</span>
+                </div>
+                <div style="float: left; width: 50%">
+                    <span class="textGreyBackground">O- Oriental<br />Asian</span><br />
+                    <span class="textGreyBackground">M- Unknown</span>
+                </div>
+            </div>
+            <div class="divBorder codesRowOneBox" style="width: 43%;">
+                <p align="center" style="margin: 0px"><strong>Situation Code</strong></p>
+                <div style="float: left; width: 50%">
+                    <span class="textGreyBackground">A- Single Victim / Single Offender</span><br />
+                    <span class="textGreyBackground">B- Single Victim / Multiple Offenders</span><br />
+                    <span class="textGreyBackground">C- Single Victim / Unknown Offender(s)</span><br />
+                </div>
+                <div style="float: left; width: 50%">
+                    <span class="textGreyBackground">D- Multiple Victims / Single Offender</span><br />
+                    <span class="textGreyBackground">E- Multiple Victims / Multiple Offenders</span><br />
+                    <span class="textGreyBackground">F- Multiple Victims / Unknown Offender(s)</span><br />
+                </div>
+            </div>
+            <div class="divBorder codesRowOneBox" style="width: 339px;">
+                <p align="center" style="margin: 0px"><strong>Victim Relationship</strong></p>
+                <div style="float: left; width: 50%">
+                    <span class="textGreyBackground">S- Spouse</span><br />
+                    <span class="textGreyBackground">P- Parent</span><br />
+                    <span class="textGreyBackground">C- Child</span><br />
+                    <span class="textGreyBackground">B- Sibling</span>
+                </div>
+                <div style="float: left; width: 50%">
+                    <span class="textGreyBackground">O- Other Family</span><br />
+                    <span class="textGreyBackground">H- Co-Habitant</span><br />
+                    <span class="textGreyBackground">Z- Other</span><br />
+                    <span class="textGreyBackground">U- Unknown</span>
+                </div>
+            </div>
+
+            <div class="divBorder codesRowTwoBox" style="width: 32%;">
+                <p align="center" style="margin: 0px"><strong>Weapon</strong></p>
+                <div style="float: left; width: 33%; height: 70px">
+                    <span class="textGreyBackground"><small>00- N/A</small></span><br />
+                    <span class="textGreyBackground"><small>01- Handgun</small></span><br />
+                    <span class="textGreyBackground"><small>02- Rifle</small></span><br />
+                    <span class="textGreyBackground"><small>03- Shotgun</small></span><br />
+                    <span class="textGreyBackground"><small>04- Firearm</small></span>
+                </div>
+                <div style="float: left; width: 33%; height: 70px">
+                    <span class="textGreyBackground"><small>05- Knife/Cutting instr.</small></span><br />
+                    <span class="textGreyBackground"><small>06 Blunt Object</small></span><br />
+                    <span class="textGreyBackground"><small>07- Hands/Fist/Feet</small></span><br />
+                    <span class="textGreyBackground"><small>08- Poison</small></span><br />
+                    <span class="textGreyBackground"><small>09- Explosives</small></span>
+                </div>
+                <div style="float: left; width: 33%; height: 70px">
+                    <span class="textGreyBackground"><small>10- Fire/Incendiary</small></span><br />
+                    <span class="textGreyBackground"><small>13- Drugs</small></span><br />
+                    <span class="textGreyBackground"><small>88- Unknown</small></span><br />
+                    <span class="textGreyBackground"><small>99- Other</small></span>
+                </div>
+            </div>
+            <div class="divBorder codesRowTwoBox" style="width: 32%;">
+                <p align="center" style="margin: 0px"><strong>Circumstances: Homicide</strong></p>
+                <div style="float: left; width: 50%">
+                    <span class="textGreyBackground"><small>A- Drinking Argument</small></span><br />
+                    <span class="textGreyBackground"><small>D- Drug Related Argument</small></span><br />
+                    <span class="textGreyBackground"><small>F- Other Felony Involved</small></span><br />
+                    <span class="textGreyBackground"><small>G- Gangland</small></span><br />
+                    <span class="textGreyBackground"><small>J- Juvenile</small></span>
+                </div>
+                <div style="float: left; width: 50%">
+                    <span class="textGreyBackground"><small>L- Lover's Quarrel</small></span><br />
+                    <span class="textGreyBackground"><small>M- Money Argument</small></span><br />
+                    <span class="textGreyBackground"><small>P- While Incarcerated</small></span><br />
+                    <span class="textGreyBackground"><small>U- Unknown</small></span><br />
+                    <span class="textGreyBackground"><small>Z- Other</small></span>
+                </div>
+            </div>
+            <div class="divBorder codesRowTwoBox" style="width: 376px;">
+                <p align="center" style="margin: 0px"><strong>Circumstances: Negligent Manslaughter</strong></p>
+                <div style="float: left; width: 50%">
+                    <span class="textGreyBackground">1- Child Playing with Weapon</span><br />
+                    <span class="textGreyBackground">2- Gun Cleaning Accident</span><br />
+                    <span class="textGreyBackground">3- Hunting Accident</span>
+                </div>
+                <div style="float: left; width: 50%">
+                    <span class="textGreyBackground">4- Other Negligent Weapon Handling</span><br />
+                    <span class="textGreyBackground">5- Vehicular Negligence</span><br />
+                    <span class="textGreyBackground">6- Other Negligence</span>
+                </div>
+            </div>
+
+            <div class="divBorder codesRowThreeBox" style="width: 25%;">
+                <p align="center" style="margin: 0px"><strong>Justifiable Circumstances</strong></p>
+                <span class="textGreyBackground">1- Not Applicable</span><br />
+                <span class="textGreyBackground">2- Felon Killed by Private Citizen</span><br />
+                <span class="textGreyBackground">3- Felon Killed by Police Officer</span>
+            </div>
+            <div class="divBorder codesRowThreeBox" style="width: 826px;">
+                <p align="center" style="margin: 0px"><strong>Code</strong></p>
+                <div style="float: left; width: 33%">
+                    <span class="textGreyBackground">1- Not Applicable</span><br />
+                    <span class="textGreyBackground">2- Felon Attacked Police Officer</span><br />
+                    <span class="textGreyBackground">3- Felon Attacked Fellow Police Officer</span>
+                </div>
+                <div style="float: left; width: 33%">
+                    <span class="textGreyBackground">4- Felon Attacked Civilian</span><br />
+                    <span class="textGreyBackground">5- Felon Attempted Flight From Crime</span><br />
+                    <span class="textGreyBackground">6- Felon Killed in Commission of Crime</span>
+                </div>
+                <div style="float: left; width: 33%">
+                    <span class="textGreyBackground">7- Felon Resisted Arrest</span><br />
+                    <span class="textGreyBackground">8- Unable to Determine</span>
+                </div>
+            </div>
+        </div>
+
+        <table width="1150">
+            <thead>
+                <tr>
+                    <td rowspan="2"><span class="largerTextGreyBackground">Report Number</span></td>
+                    <td rowspan="2"><span class="largerTextGreyBackground">Report Date</span></td>
+                    <td colspan="3"><span class="largerTextGreyBackground">Victim</span></td>
+                    <td colspan="3"><span class="largerTextGreyBackground">Offender</span></td>
+                    <td rowspan="2"><span class="largerTextGreyBackground">Situation Code</span></td>
+                    <td rowspan="2"><span class="largerTextGreyBackground">Victim Relationship</span></td>
+                    <td rowspan="2"><span class="largerTextGreyBackground">Weapon Type</span></td>
+                    <td rowspan="2"><span class="largerTextGreyBackground">Circumstance Code</span></td>
+                    <td rowspan="2"><span class="largerTextGreyBackground">Justifiable Circumstances</span></td>
+                    <td rowspan="2"><span class="largerTextGreyBackground">Justified Code</span></td>
+                </tr>
+                <tr>
+                    <td><span class="largerTextGreyBackground">Age</span></td>
+                    <td><span class="largerTextGreyBackground">Sex</span></td>
+                    <td><span class="largerTextGreyBackground">Race</span></td>
+                    <td><span class="largerTextGreyBackground">Age</span></td>
+                    <td><span class="largerTextGreyBackground">Sex</span></td>
+                    <td><span class="largerTextGreyBackground">Race</span></td>
+                </tr>
+            </thead>
+            <tr style="height: 40px;" ng-repeat="record in UCRReport.Records">
+                <td>{{record.ReportNumber}}</td>
+                <td>{{record.ReportDate}}</td>
+                <td>{{record.VictimsAge}}</td>
+                <td>{{record.VictimsSex}}</td>
+                <td>{{record.VictimsRace}}</td>
+                <td>{{record.OffendersAge}}</td>
+                <td>{{record.OffendersSex}}</td>
+                <td>{{record.OffendersRace}}</td>
+                <td>{{record.SituationCode}}</td>
+                <td>{{record.VictimRelationship}}</td>
+                <td>{{record.WeaponType}}</td>
+                <td>{{record.CircumstanceCode}}</td>
+                <td>{{record.JustifiableCircumstances}}</td>
+                <td>{{record.JustifiedCode}}</td>
+            </tr>
+        </table>
+        <br />
+        <br />
+
+        <div class="bigSpaceBottom">
+            <div class="third">
+                <div class="center">
+                    <label class="bigLabel">Prepared By</label>
+                    <span class="underlinedText">{{UCRReport.PreparedBy}}</span>
+                </div>
+            </div>
+            <div class="third">
+                <div class="center">
+                    <label class="bigLabel">Telephone #</label>
+                    <span class="underlinedText">{{UCRReport.TelephoneNumber}}</span>
+                </div>
+            </div>
+            <div class="third">
+                <div class="center">
+                    <label class="bigLabel">Date Prepared</label>
+                    <span class="underlinedText">{{UCRReport.DatePrepared | date}}</span>
+                </div>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+
+    </div>
+</body>

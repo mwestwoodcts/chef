@@ -1,0 +1,31 @@
+﻿{
+	"MobileFormsServerConnectionString" : "Data Source=QA01-DB\\Florida;Initial Catalog=MobileFormsServer;Persist Security Info=True;User ID=websvcusr;Password=W3b5erV1ce",
+	"EMPMASTConnectionString" : "Data Source=QA01-DB\\Florida;Initial Catalog=EMPMAST;Persist Security Info=True;User ID=websvcusr;Password=W3b5erV1ce",
+	"CFGConnectionString" : "Data Source=QA01-DB\\Florida;Initial Catalog=CFG;Persist Security Info=True;User ID=websvcusr;Password=W3b5erV1ce",
+	"ArrestConnectionString" : "Data Source=QA01-DB\\Florida;Initial Catalog=Arrest;Persist Security Info=True;User ID=websvcusr;Password=W3b5erV1ce",
+	"RMSConnectionString" : "Data Source=QA01-DB\\Florida;Initial Catalog=RMS;Persist Security Info=True;User ID=websvcusr;Password=W3b5erV1ce",
+	"SmartCOMConnectionString" : "Data Source=QA01-DB\\Florida;Initial Catalog=SmartCOM;Persist Security Info=True;User ID=websvcusr;Password=W3b5erV1ce",
+	"MBIConnectionString" : "Data Source=QA01-DB\\Florida;Initial Catalog=MBI;Persist Security Info=True;User ID=websvcusr;Password=W3b5erV1ce",
+	"MNIConnectionString" : "Data Source=QA01-DB\\Florida;Initial Catalog=MNI;Persist Security Info=True;User ID=websvcusr;Password=W3b5erV1ce",
+	"UserAccessConnectionString" : "Data Source=QA01-DB\\Florida;Initial Catalog=UserAccess;Persist Security Info=True;User ID=websvcusr;Password=W3b5erV1ce",
+	"OffenseConnectionString" : "Data Source=QA01-DB\\Florida;Initial Catalog=Offense;Persist Security Info=True;User ID=websvcusr;Password=W3b5erV1ce",
+	"PawnConnectionString" : "Data Source=QA01-DB\\Florida;Initial Catalog=Pawn;Persist Security Info=True;User ID=websvcusr;Password=W3b5erV1ce",
+	"CrystalPath" :  "\\\\QA01-DB\\Florida\\Smartcop.APP\\OPS\\SmartRMS\\",
+	"OrangeCountyICJISConfigurations" : 
+	{
+		"FL0480800" : 
+		{
+			"ConnectionString" : "https://ocicjis.ocfl.net/TrainIcjisWS/Icjiswebservice.asmx",
+			"UserName" : "OAKPD",
+			"Password" : "OAKPD11092010",
+			"ChargeType" : "FDLE" 
+		}
+	},
+	"OrangeCountyICJISVPNConfiguration" :
+	{
+		"ConnectionName" : "OCVPN",
+		"UserName" : "jgrave02",
+		"Password" : "jg20132014",
+		"Enabled" : "true"
+	}
+}

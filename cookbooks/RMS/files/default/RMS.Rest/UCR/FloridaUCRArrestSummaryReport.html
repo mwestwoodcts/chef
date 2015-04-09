@@ -1,0 +1,733 @@
+﻿<head>
+	<!-- This is a compatibility setting for IE. It tells IE not to run in compatibility mode.
+		IE Compatibility mode is IE8 which doesn't seem to play nicely with recent versions of AngularJS.
+		-->
+	<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+    <script src="angular-1.3.5.min.js"></script>
+    <script src="ReportPrint.js"></script>
+	<script>
+        smartCOPPrintArguments = "reportPageOne=rotatedPage,reportPageTwo=rotatedPage";
+		var UCRCtrl = function($scope) {
+				var xmlhttp;
+			if (window.XMLHttpRequest) { // code for IE7+, Firefox, Chrome, Opera, Safari
+				xmlhttp = new XMLHttpRequest();
+			} else { // code for IE6, IE5
+				xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+			}
+			xmlhttp.onreadystatechange = function() {
+				if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+					$scope.$apply(function() {
+						$scope.UCRReport = JSON.parse(xmlhttp.response).SubmissionDocument.DocumentObject;
+
+						// The return value is a JSON string which represents an object which 
+						// contains a JSON string as one of its properties.
+						// TODO: Write an Inception joke in the comments for this line.
+						$scope.UCRReport = JSON.parse($scope.UCRReport);
+
+						$scope.UCRReport.BeginReportingPeriod = dateHelper($scope.UCRReport.BeginReportingPeriod);
+						$scope.UCRReport.EndReportingPeriod = dateHelper($scope.UCRReport.EndReportingPeriod);
+					});
+				}
+			}
+			
+			var splitLocation = window.location.href.split('/');
+			var url = '';
+			for (var i = 0; i < splitLocation.length - 2; i++) {
+				url += splitLocation[i] + '/';
+			}
+			url += "GetSubmissionDocument" + window.location.search + '&format=json';
+			xmlhttp.open("GET", url, true);
+			xmlhttp.send();
+
+			var dateHelper = function(dateString) {
+				var openParen = dateString.indexOf('(');
+				var closeParen = dateString.indexOf(')');
+				var secondsSinceEpoch = dateString.substring(openParen + 1, closeParen);
+				return new Date(parseInt(secondsSinceEpoch));
+			}
+
+			//$scope.UCRReport = { "AgencyName": "CTS America", "AgencyORI": "CTSA1234", "BeginReportingPeriod": "\\/Date(1417980618217)\\/", "EndReportingPeriod": "\\/Date(1420572618218)\\/", "Homicide": { "CategoryTotal": { "Description": "Homicide", "TotalArrested": 56, "TotalJuvenilesArrested": 7, "TotalMaleJuvenilesArrested": 9, "TotalFemaleJuvenilesArrested": 11, "TotalAdultsArrested": 12, "TotalMaleAdultsArrested": 8, "TotalFemaleAdultsArrested": 10, "TotalWhiteRaceArrested": 15, "TotalBlackRaceArrested": 5, "TotalIndianRaceArrested": 6, "TotalOrientalRaceArrested": 10 }, "CategoryArrestTypes": [{ "Description": "Murder", "TotalArrested": 56, "TotalJuvenilesArrested": 7, "TotalMaleJuvenilesArrested": 9, "TotalFemaleJuvenilesArrested": 11, "TotalAdultsArrested": 12, "TotalMaleAdultsArrested": 8, "TotalFemaleAdultsArrested": 10, "TotalWhiteRaceArrested": 15, "TotalBlackRaceArrested": 5, "TotalIndianRaceArrested": 6, "TotalOrientalRaceArrested": 10 }, { "Description": "Manslaughter", "TotalArrested": 56, "TotalJuvenilesArrested": 7, "TotalMaleJuvenilesArrested": 9, "TotalFemaleJuvenilesArrested": 11, "TotalAdultsArrested": 12, "TotalMaleAdultsArrested": 8, "TotalFemaleAdultsArrested": 10, "TotalWhiteRaceArrested": 15, "TotalBlackRaceArrested": 5, "TotalIndianRaceArrested": 6, "TotalOrientalRaceArrested": 10 }] }, "ForcibleSexOffense": { "CategoryTotal": { "Description": "Forcible Sex Offense", "TotalArrested": 56, "TotalJuvenilesArrested": 7, "TotalMaleJuvenilesArrested": 9, "TotalFemaleJuvenilesArrested": 11, "TotalAdultsArrested": 12, "TotalMaleAdultsArrested": 8, "TotalFemaleAdultsArrested": 10, "TotalWhiteRaceArrested": 15, "TotalBlackRaceArrested": 5, "TotalIndianRaceArrested": 6, "TotalOrientalRaceArrested": 10 }, "CategoryArrestTypes": [{ "Description": "Forcible Rape", "TotalArrested": 56, "TotalJuvenilesArrested": 7, "TotalMaleJuvenilesArrested": 9, "TotalFemaleJuvenilesArrested": 11, "TotalAdultsArrested": 12, "TotalMaleAdultsArrested": 8, "TotalFemaleAdultsArrested": 10, "TotalWhiteRaceArrested": 15, "TotalBlackRaceArrested": 5, "TotalIndianRaceArrested": 6, "TotalOrientalRaceArrested": 10 }, { "Description": "Forcible Sodomy", "TotalArrested": 56, "TotalJuvenilesArrested": 7, "TotalMaleJuvenilesArrested": 9, "TotalFemaleJuvenilesArrested": 11, "TotalAdultsArrested": 12, "TotalMaleAdultsArrested": 8, "TotalFemaleAdultsArrested": 10, "TotalWhiteRaceArrested": 15, "TotalBlackRaceArrested": 5, "TotalIndianRaceArrested": 6, "TotalOrientalRaceArrested": 10 }, { "Description": "Forcible Fondling", "TotalArrested": 56, "TotalJuvenilesArrested": 7, "TotalMaleJuvenilesArrested": 9, "TotalFemaleJuvenilesArrested": 11, "TotalAdultsArrested": 12, "TotalMaleAdultsArrested": 8, "TotalFemaleAdultsArrested": 10, "TotalWhiteRaceArrested": 15, "TotalBlackRaceArrested": 5, "TotalIndianRaceArrested": 6, "TotalOrientalRaceArrested": 10 }] }, "Robbery": { "CategoryTotal": { "Description": "Robbery", "TotalArrested": 56, "TotalJuvenilesArrested": 7, "TotalMaleJuvenilesArrested": 9, "TotalFemaleJuvenilesArrested": 11, "TotalAdultsArrested": 12, "TotalMaleAdultsArrested": 8, "TotalFemaleAdultsArrested": 10, "TotalWhiteRaceArrested": 15, "TotalBlackRaceArrested": 5, "TotalIndianRaceArrested": 6, "TotalOrientalRaceArrested": 10 }, "CategoryArrestTypes": [] }, "AggravatedAssault": { "CategoryTotal": { "Description": "Aggravated Assault", "TotalArrested": 56, "TotalJuvenilesArrested": 7, "TotalMaleJuvenilesArrested": 9, "TotalFemaleJuvenilesArrested": 11, "TotalAdultsArrested": 12, "TotalMaleAdultsArrested": 8, "TotalFemaleAdultsArrested": 10, "TotalWhiteRaceArrested": 15, "TotalBlackRaceArrested": 5, "TotalIndianRaceArrested": 6, "TotalOrientalRaceArrested": 10 }, "CategoryArrestTypes": [] }, "AggravatedStalking": { "CategoryTotal": { "Description": "Aggravated Stalking", "TotalArrested": 56, "TotalJuvenilesArrested": 7, "TotalMaleJuvenilesArrested": 9, "TotalFemaleJuvenilesArrested": 11, "TotalAdultsArrested": 12, "TotalMaleAdultsArrested": 8, "TotalFemaleAdultsArrested": 10, "TotalWhiteRaceArrested": 15, "TotalBlackRaceArrested": 5, "TotalIndianRaceArrested": 6, "TotalOrientalRaceArrested": 10 }, "CategoryArrestTypes": [] }, "Burglary": { "CategoryTotal": { "Description": "Burglary", "TotalArrested": 56, "TotalJuvenilesArrested": 7, "TotalMaleJuvenilesArrested": 9, "TotalFemaleJuvenilesArrested": 11, "TotalAdultsArrested": 12, "TotalMaleAdultsArrested": 8, "TotalFemaleAdultsArrested": 10, "TotalWhiteRaceArrested": 15, "TotalBlackRaceArrested": 5, "TotalIndianRaceArrested": 6, "TotalOrientalRaceArrested": 10 }, "CategoryArrestTypes": [] }, "LarcencyOrTheft": { "CategoryTotal": { "Description": "Larceny/Theft", "TotalArrested": 56, "TotalJuvenilesArrested": 7, "TotalMaleJuvenilesArrested": 9, "TotalFemaleJuvenilesArrested": 11, "TotalAdultsArrested": 12, "TotalMaleAdultsArrested": 8, "TotalFemaleAdultsArrested": 10, "TotalWhiteRaceArrested": 15, "TotalBlackRaceArrested": 5, "TotalIndianRaceArrested": 6, "TotalOrientalRaceArrested": 10 }, "CategoryArrestTypes": [{ "Description": "Pocket Picking", "TotalArrested": 56, "TotalJuvenilesArrested": 7, "TotalMaleJuvenilesArrested": 9, "TotalFemaleJuvenilesArrested": 11, "TotalAdultsArrested": 12, "TotalMaleAdultsArrested": 8, "TotalFemaleAdultsArrested": 10, "TotalWhiteRaceArrested": 15, "TotalBlackRaceArrested": 5, "TotalIndianRaceArrested": 6, "TotalOrientalRaceArrested": 10 }, { "Description": "Purse Snatching", "TotalArrested": 56, "TotalJuvenilesArrested": 7, "TotalMaleJuvenilesArrested": 9, "TotalFemaleJuvenilesArrested": 11, "TotalAdultsArrested": 12, "TotalMaleAdultsArrested": 8, "TotalFemaleAdultsArrested": 10, "TotalWhiteRaceArrested": 15, "TotalBlackRaceArrested": 5, "TotalIndianRaceArrested": 6, "TotalOrientalRaceArrested": 10 }, { "Description": "Shoplifting", "TotalArrested": 56, "TotalJuvenilesArrested": 7, "TotalMaleJuvenilesArrested": 9, "TotalFemaleJuvenilesArrested": 11, "TotalAdultsArrested": 12, "TotalMaleAdultsArrested": 8, "TotalFemaleAdultsArrested": 10, "TotalWhiteRaceArrested": 15, "TotalBlackRaceArrested": 5, "TotalIndianRaceArrested": 6, "TotalOrientalRaceArrested": 10 }, { "Description": "From Motor Vehicle", "TotalArrested": 56, "TotalJuvenilesArrested": 7, "TotalMaleJuvenilesArrested": 9, "TotalFemaleJuvenilesArrested": 11, "TotalAdultsArrested": 12, "TotalMaleAdultsArrested": 8, "TotalFemaleAdultsArrested": 10, "TotalWhiteRaceArrested": 15, "TotalBlackRaceArrested": 5, "TotalIndianRaceArrested": 6, "TotalOrientalRaceArrested": 10 }, { "Description": "Theft of Vehicle Parts/AC", "TotalArrested": 56, "TotalJuvenilesArrested": 7, "TotalMaleJuvenilesArrested": 9, "TotalFemaleJuvenilesArrested": 11, "TotalAdultsArrested": 12, "TotalMaleAdultsArrested": 8, "TotalFemaleAdultsArrested": 10, "TotalWhiteRaceArrested": 15, "TotalBlackRaceArrested": 5, "TotalIndianRaceArrested": 6, "TotalOrientalRaceArrested": 10 }, { "Description": "Theft of Bicycle", "TotalArrested": 56, "TotalJuvenilesArrested": 7, "TotalMaleJuvenilesArrested": 9, "TotalFemaleJuvenilesArrested": 11, "TotalAdultsArrested": 12, "TotalMaleAdultsArrested": 8, "TotalFemaleAdultsArrested": 10, "TotalWhiteRaceArrested": 15, "TotalBlackRaceArrested": 5, "TotalIndianRaceArrested": 6, "TotalOrientalRaceArrested": 10 }, { "Description": "From Building", "TotalArrested": 56, "TotalJuvenilesArrested": 7, "TotalMaleJuvenilesArrested": 9, "TotalFemaleJuvenilesArrested": 11, "TotalAdultsArrested": 12, "TotalMaleAdultsArrested": 8, "TotalFemaleAdultsArrested": 10, "TotalWhiteRaceArrested": 15, "TotalBlackRaceArrested": 5, "TotalIndianRaceArrested": 6, "TotalOrientalRaceArrested": 10 }, { "Description": "From Coin Machine", "TotalArrested": 56, "TotalJuvenilesArrested": 7, "TotalMaleJuvenilesArrested": 9, "TotalFemaleJuvenilesArrested": 11, "TotalAdultsArrested": 12, "TotalMaleAdultsArrested": 8, "TotalFemaleAdultsArrested": 10, "TotalWhiteRaceArrested": 15, "TotalBlackRaceArrested": 5, "TotalIndianRaceArrested": 6, "TotalOrientalRaceArrested": 10 }, { "Description": "All Other", "TotalArrested": 56, "TotalJuvenilesArrested": 7, "TotalMaleJuvenilesArrested": 9, "TotalFemaleJuvenilesArrested": 11, "TotalAdultsArrested": 12, "TotalMaleAdultsArrested": 8, "TotalFemaleAdultsArrested": 10, "TotalWhiteRaceArrested": 15, "TotalBlackRaceArrested": 5, "TotalIndianRaceArrested": 6, "TotalOrientalRaceArrested": 10 }] }, "MotorVehicleTheft": { "CategoryTotal": { "Description": "Motor Vehicle Theft", "TotalArrested": 56, "TotalJuvenilesArrested": 7, "TotalMaleJuvenilesArrested": 9, "TotalFemaleJuvenilesArrested": 11, "TotalAdultsArrested": 12, "TotalMaleAdultsArrested": 8, "TotalFemaleAdultsArrested": 10, "TotalWhiteRaceArrested": 15, "TotalBlackRaceArrested": 5, "TotalIndianRaceArrested": 6, "TotalOrientalRaceArrested": 10 }, "CategoryArrestTypes": [] }, "KidnapOrAbduction": { "CategoryTotal": { "Description": "Kidnapping/Abduction", "TotalArrested": 56, "TotalJuvenilesArrested": 7, "TotalMaleJuvenilesArrested": 9, "TotalFemaleJuvenilesArrested": 11, "TotalAdultsArrested": 12, "TotalMaleAdultsArrested": 8, "TotalFemaleAdultsArrested": 10, "TotalWhiteRaceArrested": 15, "TotalBlackRaceArrested": 5, "TotalIndianRaceArrested": 6, "TotalOrientalRaceArrested": 10 }, "CategoryArrestTypes": [] }, "Arson": { "CategoryTotal": { "Description": "Arson", "TotalArrested": 56, "TotalJuvenilesArrested": 7, "TotalMaleJuvenilesArrested": 9, "TotalFemaleJuvenilesArrested": 11, "TotalAdultsArrested": 12, "TotalMaleAdultsArrested": 8, "TotalFemaleAdultsArrested": 10, "TotalWhiteRaceArrested": 15, "TotalBlackRaceArrested": 5, "TotalIndianRaceArrested": 6, "TotalOrientalRaceArrested": 10 }, "CategoryArrestTypes": [] }, "SimpleAssault": { "CategoryTotal": { "Description": "Simple Assault", "TotalArrested": 56, "TotalJuvenilesArrested": 7, "TotalMaleJuvenilesArrested": 9, "TotalFemaleJuvenilesArrested": 11, "TotalAdultsArrested": 12, "TotalMaleAdultsArrested": 8, "TotalFemaleAdultsArrested": 10, "TotalWhiteRaceArrested": 15, "TotalBlackRaceArrested": 5, "TotalIndianRaceArrested": 6, "TotalOrientalRaceArrested": 10 }, "CategoryArrestTypes": [] }, "SimpleStalking": { "CategoryTotal": { "Description": "Simple Stalking", "TotalArrested": 56, "TotalJuvenilesArrested": 7, "TotalMaleJuvenilesArrested": 9, "TotalFemaleJuvenilesArrested": 11, "TotalAdultsArrested": 12, "TotalMaleAdultsArrested": 8, "TotalFemaleAdultsArrested": 10, "TotalWhiteRaceArrested": 15, "TotalBlackRaceArrested": 5, "TotalIndianRaceArrested": 6, "TotalOrientalRaceArrested": 10 }, "CategoryArrestTypes": [] }, "DrugsOrNarcoticsOffense": { "CategoryTotal": { "Description": "Drugs/Narcotics Offense", "TotalArrested": 56, "TotalJuvenilesArrested": 7, "TotalMaleJuvenilesArrested": 9, "TotalFemaleJuvenilesArrested": 11, "TotalAdultsArrested": 12, "TotalMaleAdultsArrested": 8, "TotalFemaleAdultsArrested": 10, "TotalWhiteRaceArrested": 15, "TotalBlackRaceArrested": 5, "TotalIndianRaceArrested": 6, "TotalOrientalRaceArrested": 10 }, "CategoryArrestTypes": [{ "Description": "Drug/Narcotic", "TotalArrested": 56, "TotalJuvenilesArrested": 7, "TotalMaleJuvenilesArrested": 9, "TotalFemaleJuvenilesArrested": 11, "TotalAdultsArrested": 12, "TotalMaleAdultsArrested": 8, "TotalFemaleAdultsArrested": 10, "TotalWhiteRaceArrested": 15, "TotalBlackRaceArrested": 5, "TotalIndianRaceArrested": 6, "TotalOrientalRaceArrested": 10 }, { "Description": "Drug/Equipment", "TotalArrested": 56, "TotalJuvenilesArrested": 7, "TotalMaleJuvenilesArrested": 9, "TotalFemaleJuvenilesArrested": 11, "TotalAdultsArrested": 12, "TotalMaleAdultsArrested": 8, "TotalFemaleAdultsArrested": 10, "TotalWhiteRaceArrested": 15, "TotalBlackRaceArrested": 5, "TotalIndianRaceArrested": 6, "TotalOrientalRaceArrested": 10 }] }, "Bribery": { "CategoryTotal": { "Description": "Bribery", "TotalArrested": 56, "TotalJuvenilesArrested": 7, "TotalMaleJuvenilesArrested": 9, "TotalFemaleJuvenilesArrested": 11, "TotalAdultsArrested": 12, "TotalMaleAdultsArrested": 8, "TotalFemaleAdultsArrested": 10, "TotalWhiteRaceArrested": 15, "TotalBlackRaceArrested": 5, "TotalIndianRaceArrested": 6, "TotalOrientalRaceArrested": 10 }, "CategoryArrestTypes": [] }, "Embezzlement": { "CategoryTotal": { "Description": "Embezzlement", "TotalArrested": 56, "TotalJuvenilesArrested": 7, "TotalMaleJuvenilesArrested": 9, "TotalFemaleJuvenilesArrested": 11, "TotalAdultsArrested": 12, "TotalMaleAdultsArrested": 8, "TotalFemaleAdultsArrested": 10, "TotalWhiteRaceArrested": 15, "TotalBlackRaceArrested": 5, "TotalIndianRaceArrested": 6, "TotalOrientalRaceArrested": 10 }, "CategoryArrestTypes": [] }, "Fraud": { "CategoryTotal": { "Description": "Fraud", "TotalArrested": 56, "TotalJuvenilesArrested": 7, "TotalMaleJuvenilesArrested": 9, "TotalFemaleJuvenilesArrested": 11, "TotalAdultsArrested": 12, "TotalMaleAdultsArrested": 8, "TotalFemaleAdultsArrested": 10, "TotalWhiteRaceArrested": 15, "TotalBlackRaceArrested": 5, "TotalIndianRaceArrested": 6, "TotalOrientalRaceArrested": 10 }, "CategoryArrestTypes": [{ "Description": "False Pretenses/Swindling", "TotalArrested": 56, "TotalJuvenilesArrested": 7, "TotalMaleJuvenilesArrested": 9, "TotalFemaleJuvenilesArrested": 11, "TotalAdultsArrested": 12, "TotalMaleAdultsArrested": 8, "TotalFemaleAdultsArrested": 10, "TotalWhiteRaceArrested": 15, "TotalBlackRaceArrested": 5, "TotalIndianRaceArrested": 6, "TotalOrientalRaceArrested": 10 }, { "Description": "Credit Card/ATM", "TotalArrested": 56, "TotalJuvenilesArrested": 7, "TotalMaleJuvenilesArrested": 9, "TotalFemaleJuvenilesArrested": 11, "TotalAdultsArrested": 12, "TotalMaleAdultsArrested": 8, "TotalFemaleAdultsArrested": 10, "TotalWhiteRaceArrested": 15, "TotalBlackRaceArrested": 5, "TotalIndianRaceArrested": 6, "TotalOrientalRaceArrested": 10 }, { "Description": "Impersonation", "TotalArrested": 56, "TotalJuvenilesArrested": 7, "TotalMaleJuvenilesArrested": 9, "TotalFemaleJuvenilesArrested": 11, "TotalAdultsArrested": 12, "TotalMaleAdultsArrested": 8, "TotalFemaleAdultsArrested": 10, "TotalWhiteRaceArrested": 15, "TotalBlackRaceArrested": 5, "TotalIndianRaceArrested": 6, "TotalOrientalRaceArrested": 10 }, { "Description": "Welfare", "TotalArrested": 56, "TotalJuvenilesArrested": 7, "TotalMaleJuvenilesArrested": 9, "TotalFemaleJuvenilesArrested": 11, "TotalAdultsArrested": 12, "TotalMaleAdultsArrested": 8, "TotalFemaleAdultsArrested": 10, "TotalWhiteRaceArrested": 15, "TotalBlackRaceArrested": 5, "TotalIndianRaceArrested": 6, "TotalOrientalRaceArrested": 10 }, { "Description": "Wire", "TotalArrested": 56, "TotalJuvenilesArrested": 7, "TotalMaleJuvenilesArrested": 9, "TotalFemaleJuvenilesArrested": 11, "TotalAdultsArrested": 12, "TotalMaleAdultsArrested": 8, "TotalFemaleAdultsArrested": 10, "TotalWhiteRaceArrested": 15, "TotalBlackRaceArrested": 5, "TotalIndianRaceArrested": 6, "TotalOrientalRaceArrested": 10 }] }, "CounterfeitOrForgery": { "CategoryTotal": { "Description": "Counterfeit/Forgery", "TotalArrested": 56, "TotalJuvenilesArrested": 7, "TotalMaleJuvenilesArrested": 9, "TotalFemaleJuvenilesArrested": 11, "TotalAdultsArrested": 12, "TotalMaleAdultsArrested": 8, "TotalFemaleAdultsArrested": 10, "TotalWhiteRaceArrested": 15, "TotalBlackRaceArrested": 5, "TotalIndianRaceArrested": 6, "TotalOrientalRaceArrested": 10 }, "CategoryArrestTypes": [] }, "ExtortionOrBlackmail": { "CategoryTotal": { "Description": "Extortion/Blackmail", "TotalArrested": 56, "TotalJuvenilesArrested": 7, "TotalMaleJuvenilesArrested": 9, "TotalFemaleJuvenilesArrested": 11, "TotalAdultsArrested": 12, "TotalMaleAdultsArrested": 8, "TotalFemaleAdultsArrested": 10, "TotalWhiteRaceArrested": 15, "TotalBlackRaceArrested": 5, "TotalIndianRaceArrested": 6, "TotalOrientalRaceArrested": 10 }, "CategoryArrestTypes": [] }, "Intimidation": { "CategoryTotal": { "Description": "Intimidation", "TotalArrested": 56, "TotalJuvenilesArrested": 7, "TotalMaleJuvenilesArrested": 9, "TotalFemaleJuvenilesArrested": 11, "TotalAdultsArrested": 12, "TotalMaleAdultsArrested": 8, "TotalFemaleAdultsArrested": 10, "TotalWhiteRaceArrested": 15, "TotalBlackRaceArrested": 5, "TotalIndianRaceArrested": 6, "TotalOrientalRaceArrested": 10 }, "CategoryArrestTypes": [] }, "Prostitution": { "CategoryTotal": { "Description": "Prostitution", "TotalArrested": 56, "TotalJuvenilesArrested": 7, "TotalMaleJuvenilesArrested": 9, "TotalFemaleJuvenilesArrested": 11, "TotalAdultsArrested": 12, "TotalMaleAdultsArrested": 8, "TotalFemaleAdultsArrested": 10, "TotalWhiteRaceArrested": 15, "TotalBlackRaceArrested": 5, "TotalIndianRaceArrested": 6, "TotalOrientalRaceArrested": 10 }, "CategoryArrestTypes": [] }, "NonForcedSexualOffense": { "CategoryTotal": { "Description": "Non-Forcible Sex Offense", "TotalArrested": 56, "TotalJuvenilesArrested": 7, "TotalMaleJuvenilesArrested": 9, "TotalFemaleJuvenilesArrested": 11, "TotalAdultsArrested": 12, "TotalMaleAdultsArrested": 8, "TotalFemaleAdultsArrested": 10, "TotalWhiteRaceArrested": 15, "TotalBlackRaceArrested": 5, "TotalIndianRaceArrested": 6, "TotalOrientalRaceArrested": 10 }, "CategoryArrestTypes": [{ "Description": "Sex Offense", "TotalArrested": 56, "TotalJuvenilesArrested": 7, "TotalMaleJuvenilesArrested": 9, "TotalFemaleJuvenilesArrested": 11, "TotalAdultsArrested": 12, "TotalMaleAdultsArrested": 8, "TotalFemaleAdultsArrested": 10, "TotalWhiteRaceArrested": 15, "TotalBlackRaceArrested": 5, "TotalIndianRaceArrested": 6, "TotalOrientalRaceArrested": 10 }, { "Description": "Obscenity", "TotalArrested": 56, "TotalJuvenilesArrested": 7, "TotalMaleJuvenilesArrested": 9, "TotalFemaleJuvenilesArrested": 11, "TotalAdultsArrested": 12, "TotalMaleAdultsArrested": 8, "TotalFemaleAdultsArrested": 10, "TotalWhiteRaceArrested": 15, "TotalBlackRaceArrested": 5, "TotalIndianRaceArrested": 6, "TotalOrientalRaceArrested": 10 }] }, "StolenProperty": { "CategoryTotal": { "Description": "Stolen Property", "TotalArrested": 56, "TotalJuvenilesArrested": 7, "TotalMaleJuvenilesArrested": 9, "TotalFemaleJuvenilesArrested": 11, "TotalAdultsArrested": 12, "TotalMaleAdultsArrested": 8, "TotalFemaleAdultsArrested": 10, "TotalWhiteRaceArrested": 15, "TotalBlackRaceArrested": 5, "TotalIndianRaceArrested": 6, "TotalOrientalRaceArrested": 10 }, "CategoryArrestTypes": [] }, "DUI": { "CategoryTotal": { "Description": "DUI", "TotalArrested": 56, "TotalJuvenilesArrested": 7, "TotalMaleJuvenilesArrested": 9, "TotalFemaleJuvenilesArrested": 11, "TotalAdultsArrested": 12, "TotalMaleAdultsArrested": 8, "TotalFemaleAdultsArrested": 10, "TotalWhiteRaceArrested": 15, "TotalBlackRaceArrested": 5, "TotalIndianRaceArrested": 6, "TotalOrientalRaceArrested": 10 }, "CategoryArrestTypes": [] }, "DestructionOrDamage": { "CategoryTotal": { "Description": "Destruction/Damage", "TotalArrested": 56, "TotalJuvenilesArrested": 7, "TotalMaleJuvenilesArrested": 9, "TotalFemaleJuvenilesArrested": 11, "TotalAdultsArrested": 12, "TotalMaleAdultsArrested": 8, "TotalFemaleAdultsArrested": 10, "TotalWhiteRaceArrested": 15, "TotalBlackRaceArrested": 5, "TotalIndianRaceArrested": 6, "TotalOrientalRaceArrested": 10 }, "CategoryArrestTypes": [] }, "Gambling": { "CategoryTotal": { "Description": "Gambling", "TotalArrested": 56, "TotalJuvenilesArrested": 7, "TotalMaleJuvenilesArrested": 9, "TotalFemaleJuvenilesArrested": 11, "TotalAdultsArrested": 12, "TotalMaleAdultsArrested": 8, "TotalFemaleAdultsArrested": 10, "TotalWhiteRaceArrested": 15, "TotalBlackRaceArrested": 5, "TotalIndianRaceArrested": 6, "TotalOrientalRaceArrested": 10 }, "CategoryArrestTypes": [] }, "WeaponsViolations": { "CategoryTotal": { "Description": "Weapons Violations", "TotalArrested": 56, "TotalJuvenilesArrested": 7, "TotalMaleJuvenilesArrested": 9, "TotalFemaleJuvenilesArrested": 11, "TotalAdultsArrested": 12, "TotalMaleAdultsArrested": 8, "TotalFemaleAdultsArrested": 10, "TotalWhiteRaceArrested": 15, "TotalBlackRaceArrested": 5, "TotalIndianRaceArrested": 6, "TotalOrientalRaceArrested": 10 }, "CategoryArrestTypes": [] }, "LiquorLawViolations": { "CategoryTotal": { "Description": "Liquor Law Violations", "TotalArrested": 56, "TotalJuvenilesArrested": 7, "TotalMaleJuvenilesArrested": 9, "TotalFemaleJuvenilesArrested": 11, "TotalAdultsArrested": 12, "TotalMaleAdultsArrested": 8, "TotalFemaleAdultsArrested": 10, "TotalWhiteRaceArrested": 15, "TotalBlackRaceArrested": 5, "TotalIndianRaceArrested": 6, "TotalOrientalRaceArrested": 10 }, "CategoryArrestTypes": [] }, "Miscellaneous": { "CategoryTotal": { "Description": "Miscellaneous", "TotalArrested": 56, "TotalJuvenilesArrested": 7, "TotalMaleJuvenilesArrested": 9, "TotalFemaleJuvenilesArrested": 11, "TotalAdultsArrested": 12, "TotalMaleAdultsArrested": 8, "TotalFemaleAdultsArrested": 10, "TotalWhiteRaceArrested": 15, "TotalBlackRaceArrested": 5, "TotalIndianRaceArrested": 6, "TotalOrientalRaceArrested": 10 }, "CategoryArrestTypes": [] }, "Total": { "Description": "Total", "TotalArrested": 56, "TotalJuvenilesArrested": 7, "TotalMaleJuvenilesArrested": 9, "TotalFemaleJuvenilesArrested": 11, "TotalAdultsArrested": 12, "TotalMaleAdultsArrested": 8, "TotalFemaleAdultsArrested": 10, "TotalWhiteRaceArrested": 15, "TotalBlackRaceArrested": 5, "TotalIndianRaceArrested": 6, "TotalOrientalRaceArrested": 10 } }
+			//$scope.UCRReport.BeginReportingPeriod = dateHelper($scope.UCRReport.BeginReportingPeriod);
+			//$scope.UCRReport.EndReportingPeriod = dateHelper($scope.UCRReport.EndReportingPeriod);
+		}
+
+		var UCRApp = angular.module('UCRApp', []);
+
+		UCRApp.controller('UCRCtrl', ['$scope', UCRCtrl]);
+	</script>
+	<style>
+		body {
+			font: 12px arial, sans-serif;
+		}
+
+		td {
+			border: solid 3px;
+			text-align: center;
+		}
+
+		table {
+			border-spacing: 0px;
+			border-collapse: collapse;
+		}
+
+		th {
+			border: solid 1px;
+			background-color: #AAAAAA;
+			vertical-align: bottom;
+			padding: 2px;
+		}
+
+		.third {
+			float: left;
+			width: 33%;
+		}
+
+		.bigSpaceBottom {
+			margin-bottom: 15px;
+		}
+
+		.clearfix {
+			overflow: auto;
+		}
+
+		.bigLabel {
+			font: 14px arial, sans-serif;
+		}
+
+		.underlinedText {
+			border-bottom: 2px solid;
+			padding: 2px 20px 3px 20px;
+		}
+
+		.center {
+			width: 90%;
+			margin-left: auto;
+			margin-right: auto;
+		}
+
+		.textLeftAlign {
+			text-align: left;
+		}
+		.textLeftAlignSpace {
+			text-align: left;
+			text-indent: 15px
+		}
+
+        .reportPage {
+            height: 1195px;
+            width: 1150px;
+            margin-bottom: 10px;
+        }
+
+        .rotatedPage {
+            position: relative;
+            left: -250px;
+
+            -webkit-transform: rotate(90deg); /* Safari and Chrome */
+            -moz-transform: rotate(90deg); /* Firefox */
+            -ms-transform: rotate(90deg); /* IE 9 */
+            -o-transform: rotate(90deg); /* Opera */
+            transform: rotate(90deg);
+        }
+
+        @media print {
+            .pageBreakAfter {
+                page-break-after: always;
+            }
+        }
+	</style>
+</head>
+
+<body ng-app="UCRApp" ng-controller="UCRCtrl">
+    <div id="reportPageOne" class="reportPage">
+        <h2 style="text-align: center;">Uniform Crime Reports Arrest Form</h2>
+
+        <table style="width: 1200px;">
+            <tr>
+                <td><b>Offense</b></td>
+                <td><b>Total Arrested</b></td>
+                <td colspan="3"><b>Juveniles</b></td>
+                <td colspan="3"><b>Adults</b></td>
+                <td colspan="4"><b>Race</b></td>
+            </tr>
+            <tr>
+                <td><b>=================</b></td>
+                <td><b>======</b></td>
+                <td><b>Total</b></td>
+                <td><b>Male</b></td>
+                <td><b>Female</b></td>
+                <td><b>Total</b></td>
+                <td><b>Male</b></td>
+                <td><b>Female</b></td>
+                <td><b>White</b></td>
+                <td><b>Black</b></td>
+                <td><b>Indian</b></td>
+                <td><b>Oriental</b></td>
+            </tr>
+            <tr>
+                <td class="textLeftAlign"><b>{{UCRReport.Homicide.CategoryTotal.Description}}</b></td>
+                <td>{{UCRReport.Homicide.CategoryTotal.TotalArrested}}</td>
+                <td>{{UCRReport.Homicide.CategoryTotal.TotalJuvenilesArrested}}</td>
+                <td>{{UCRReport.Homicide.CategoryTotal.TotalMaleJuvenilesArrested}}</td>
+                <td>{{UCRReport.Homicide.CategoryTotal.TotalFemaleJuvenilesArrested}}</td>
+                <td>{{UCRReport.Homicide.CategoryTotal.TotalAdultsArrested}}</td>
+                <td>{{UCRReport.Homicide.CategoryTotal.TotalMaleAdultsArrested}}</td>
+                <td>{{UCRReport.Homicide.CategoryTotal.TotalFemaleAdultsArrested}}</td>
+                <td>{{UCRReport.Homicide.CategoryTotal.TotalWhiteRaceArrested}}</td>
+                <td>{{UCRReport.Homicide.CategoryTotal.TotalBlackRaceArrested}}</td>
+                <td>{{UCRReport.Homicide.CategoryTotal.TotalIndianRaceArrested}}</td>
+                <td>{{UCRReport.Homicide.CategoryTotal.TotalOrientalRaceArrested}}</td>
+            </tr>
+            <tr ng-repeat="homicide in UCRReport.Homicide.CategoryArrestTypes">
+                <td class="textLeftAlignSpace">{{homicide.Description}}</td>
+                <td>{{homicide.TotalArrested}}</td>
+                <td>{{homicide.TotalJuvenilesArrested}}</td>
+                <td>{{homicide.TotalMaleJuvenilesArrested}}</td>
+                <td>{{homicide.TotalFemaleJuvenilesArrested}}</td>
+                <td>{{homicide.TotalAdultsArrested}}</td>
+                <td>{{homicide.TotalMaleAdultsArrested}}</td>
+                <td>{{homicide.TotalFemaleAdultsArrested}}</td>
+                <td>{{homicide.TotalWhiteRaceArrested}}</td>
+                <td>{{homicide.TotalBlackRaceArrested}}</td>
+                <td>{{homicide.TotalIndianRaceArrested}}</td>
+                <td>{{homicide.TotalOrientalRaceArrested}}</td>
+            </tr>
+            <tr>
+                <td class="textLeftAlign"><b>{{UCRReport.ForcibleSexOffense.CategoryTotal.Description}}</b></td>
+                <td>{{UCRReport.ForcibleSexOffense.CategoryTotal.TotalArrested}}</td>
+                <td>{{UCRReport.ForcibleSexOffense.CategoryTotal.TotalJuvenilesArrested}}</td>
+                <td>{{UCRReport.ForcibleSexOffense.CategoryTotal.TotalMaleJuvenilesArrested}}</td>
+                <td>{{UCRReport.ForcibleSexOffense.CategoryTotal.TotalFemaleJuvenilesArrested}}</td>
+                <td>{{UCRReport.ForcibleSexOffense.CategoryTotal.TotalAdultsArrested}}</td>
+                <td>{{UCRReport.ForcibleSexOffense.CategoryTotal.TotalMaleAdultsArrested}}</td>
+                <td>{{UCRReport.ForcibleSexOffense.CategoryTotal.TotalFemaleAdultsArrested}}</td>
+                <td>{{UCRReport.ForcibleSexOffense.CategoryTotal.TotalWhiteRaceArrested}}</td>
+                <td>{{UCRReport.ForcibleSexOffense.CategoryTotal.TotalBlackRaceArrested}}</td>
+                <td>{{UCRReport.ForcibleSexOffense.CategoryTotal.TotalIndianRaceArrested}}</td>
+                <td>{{UCRReport.ForcibleSexOffense.CategoryTotal.TotalOrientalRaceArrested}}</td>
+            </tr>
+            <tr ng-repeat="forcibleSexOffense in UCRReport.ForcibleSexOffense.CategoryArrestTypes">
+                <td class="textLeftAlignSpace">{{forcibleSexOffense.Description}}</td>
+                <td>{{forcibleSexOffense.TotalArrested}}</td>
+                <td>{{forcibleSexOffense.TotalJuvenilesArrested}}</td>
+                <td>{{forcibleSexOffense.TotalMaleJuvenilesArrested}}</td>
+                <td>{{forcibleSexOffense.TotalFemaleJuvenilesArrested}}</td>
+                <td>{{forcibleSexOffense.TotalAdultsArrested}}</td>
+                <td>{{forcibleSexOffense.TotalMaleAdultsArrested}}</td>
+                <td>{{forcibleSexOffense.TotalFemaleAdultsArrested}}</td>
+                <td>{{forcibleSexOffense.TotalWhiteRaceArrested}}</td>
+                <td>{{forcibleSexOffense.TotalBlackRaceArrested}}</td>
+                <td>{{forcibleSexOffense.TotalIndianRaceArrested}}</td>
+                <td>{{forcibleSexOffense.TotalOrientalRaceArrested}}</td>
+            </tr>
+            <tr>
+                <td class="textLeftAlign"><b>{{UCRReport.Robbery.CategoryTotal.Description}}</b></td>
+                <td>{{UCRReport.Robbery.CategoryTotal.TotalArrested}}</td>
+                <td>{{UCRReport.Robbery.CategoryTotal.TotalJuvenilesArrested}}</td>
+                <td>{{UCRReport.Robbery.CategoryTotal.TotalMaleJuvenilesArrested}}</td>
+                <td>{{UCRReport.Robbery.CategoryTotal.TotalFemaleJuvenilesArrested}}</td>
+                <td>{{UCRReport.Robbery.CategoryTotal.TotalAdultsArrested}}</td>
+                <td>{{UCRReport.Robbery.CategoryTotal.TotalMaleAdultsArrested}}</td>
+                <td>{{UCRReport.Robbery.CategoryTotal.TotalFemaleAdultsArrested}}</td>
+                <td>{{UCRReport.Robbery.CategoryTotal.TotalWhiteRaceArrested}}</td>
+                <td>{{UCRReport.Robbery.CategoryTotal.TotalBlackRaceArrested}}</td>
+                <td>{{UCRReport.Robbery.CategoryTotal.TotalIndianRaceArrested}}</td>
+                <td>{{UCRReport.Robbery.CategoryTotal.TotalOrientalRaceArrested}}</td>
+            </tr>
+            <tr>
+                <td class="textLeftAlign"><b>{{UCRReport.AggravatedAssault.CategoryTotal.Description}}</b></td>
+                <td>{{UCRReport.AggravatedAssault.CategoryTotal.TotalArrested}}</td>
+                <td>{{UCRReport.AggravatedAssault.CategoryTotal.TotalJuvenilesArrested}}</td>
+                <td>{{UCRReport.AggravatedAssault.CategoryTotal.TotalMaleJuvenilesArrested}}</td>
+                <td>{{UCRReport.AggravatedAssault.CategoryTotal.TotalFemaleJuvenilesArrested}}</td>
+                <td>{{UCRReport.AggravatedAssault.CategoryTotal.TotalAdultsArrested}}</td>
+                <td>{{UCRReport.AggravatedAssault.CategoryTotal.TotalMaleAdultsArrested}}</td>
+                <td>{{UCRReport.AggravatedAssault.CategoryTotal.TotalFemaleAdultsArrested}}</td>
+                <td>{{UCRReport.AggravatedAssault.CategoryTotal.TotalWhiteRaceArrested}}</td>
+                <td>{{UCRReport.AggravatedAssault.CategoryTotal.TotalBlackRaceArrested}}</td>
+                <td>{{UCRReport.AggravatedAssault.CategoryTotal.TotalIndianRaceArrested}}</td>
+                <td>{{UCRReport.AggravatedAssault.CategoryTotal.TotalOrientalRaceArrested}}</td>
+            </tr>
+            <tr>
+                <td class="textLeftAlign"><b>{{UCRReport.AggravatedStalking.CategoryTotal.Description}}</b></td>
+                <td>{{UCRReport.AggravatedStalking.CategoryTotal.TotalArrested}}</td>
+                <td>{{UCRReport.AggravatedStalking.CategoryTotal.TotalJuvenilesArrested}}</td>
+                <td>{{UCRReport.AggravatedStalking.CategoryTotal.TotalMaleJuvenilesArrested}}</td>
+                <td>{{UCRReport.AggravatedStalking.CategoryTotal.TotalFemaleJuvenilesArrested}}</td>
+                <td>{{UCRReport.AggravatedStalking.CategoryTotal.TotalAdultsArrested}}</td>
+                <td>{{UCRReport.AggravatedStalking.CategoryTotal.TotalMaleAdultsArrested}}</td>
+                <td>{{UCRReport.AggravatedStalking.CategoryTotal.TotalFemaleAdultsArrested}}</td>
+                <td>{{UCRReport.AggravatedStalking.CategoryTotal.TotalWhiteRaceArrested}}</td>
+                <td>{{UCRReport.AggravatedStalking.CategoryTotal.TotalBlackRaceArrested}}</td>
+                <td>{{UCRReport.AggravatedStalking.CategoryTotal.TotalIndianRaceArrested}}</td>
+                <td>{{UCRReport.AggravatedStalking.CategoryTotal.TotalOrientalRaceArrested}}</td>
+            </tr>
+            <tr>
+                <td class="textLeftAlign"><b>{{UCRReport.Burglary.CategoryTotal.Description}}</b></td>
+                <td>{{UCRReport.Burglary.CategoryTotal.TotalArrested}}</td>
+                <td>{{UCRReport.Burglary.CategoryTotal.TotalJuvenilesArrested}}</td>
+                <td>{{UCRReport.Burglary.CategoryTotal.TotalMaleJuvenilesArrested}}</td>
+                <td>{{UCRReport.Burglary.CategoryTotal.TotalFemaleJuvenilesArrested}}</td>
+                <td>{{UCRReport.Burglary.CategoryTotal.TotalAdultsArrested}}</td>
+                <td>{{UCRReport.Burglary.CategoryTotal.TotalMaleAdultsArrested}}</td>
+                <td>{{UCRReport.Burglary.CategoryTotal.TotalFemaleAdultsArrested}}</td>
+                <td>{{UCRReport.Burglary.CategoryTotal.TotalWhiteRaceArrested}}</td>
+                <td>{{UCRReport.Burglary.CategoryTotal.TotalBlackRaceArrested}}</td>
+                <td>{{UCRReport.Burglary.CategoryTotal.TotalIndianRaceArrested}}</td>
+                <td>{{UCRReport.Burglary.CategoryTotal.TotalOrientalRaceArrested}}</td>
+            </tr>
+            <tr>
+                <td class="textLeftAlign"><b>{{UCRReport.LarcencyOrTheft.CategoryTotal.Description}}</b></td>
+                <td>{{UCRReport.LarcencyOrTheft.CategoryTotal.TotalArrested}}</td>
+                <td>{{UCRReport.LarcencyOrTheft.CategoryTotal.TotalJuvenilesArrested}}</td>
+                <td>{{UCRReport.LarcencyOrTheft.CategoryTotal.TotalMaleJuvenilesArrested}}</td>
+                <td>{{UCRReport.LarcencyOrTheft.CategoryTotal.TotalFemaleJuvenilesArrested}}</td>
+                <td>{{UCRReport.LarcencyOrTheft.CategoryTotal.TotalAdultsArrested}}</td>
+                <td>{{UCRReport.LarcencyOrTheft.CategoryTotal.TotalMaleAdultsArrested}}</td>
+                <td>{{UCRReport.LarcencyOrTheft.CategoryTotal.TotalFemaleAdultsArrested}}</td>
+                <td>{{UCRReport.LarcencyOrTheft.CategoryTotal.TotalWhiteRaceArrested}}</td>
+                <td>{{UCRReport.LarcencyOrTheft.CategoryTotal.TotalBlackRaceArrested}}</td>
+                <td>{{UCRReport.LarcencyOrTheft.CategoryTotal.TotalIndianRaceArrested}}</td>
+                <td>{{UCRReport.LarcencyOrTheft.CategoryTotal.TotalOrientalRaceArrested}}</td>
+            </tr>
+            <tr ng-repeat="larcencyOrTheft in UCRReport.LarcencyOrTheft.CategoryArrestTypes">
+                <td class="textLeftAlignSpace">{{larcencyOrTheft.Description}}</td>
+                <td>{{larcencyOrTheft.TotalArrested}}</td>
+                <td>{{larcencyOrTheft.TotalJuvenilesArrested}}</td>
+                <td>{{larcencyOrTheft.TotalMaleJuvenilesArrested}}</td>
+                <td>{{larcencyOrTheft.TotalFemaleJuvenilesArrested}}</td>
+                <td>{{larcencyOrTheft.TotalAdultsArrested}}</td>
+                <td>{{larcencyOrTheft.TotalMaleAdultsArrested}}</td>
+                <td>{{larcencyOrTheft.TotalFemaleAdultsArrested}}</td>
+                <td>{{larcencyOrTheft.TotalWhiteRaceArrested}}</td>
+                <td>{{larcencyOrTheft.TotalBlackRaceArrested}}</td>
+                <td>{{larcencyOrTheft.TotalIndianRaceArrested}}</td>
+                <td>{{larcencyOrTheft.TotalOrientalRaceArrested}}</td>
+            </tr>
+            <tr>
+                <td class="textLeftAlign"><b>{{UCRReport.MotorVehicleTheft.CategoryTotal.Description}}</b></td>
+                <td>{{UCRReport.MotorVehicleTheft.CategoryTotal.TotalArrested}}</td>
+                <td>{{UCRReport.MotorVehicleTheft.CategoryTotal.TotalJuvenilesArrested}}</td>
+                <td>{{UCRReport.MotorVehicleTheft.CategoryTotal.TotalMaleJuvenilesArrested}}</td>
+                <td>{{UCRReport.MotorVehicleTheft.CategoryTotal.TotalFemaleJuvenilesArrested}}</td>
+                <td>{{UCRReport.MotorVehicleTheft.CategoryTotal.TotalAdultsArrested}}</td>
+                <td>{{UCRReport.MotorVehicleTheft.CategoryTotal.TotalMaleAdultsArrested}}</td>
+                <td>{{UCRReport.MotorVehicleTheft.CategoryTotal.TotalFemaleAdultsArrested}}</td>
+                <td>{{UCRReport.MotorVehicleTheft.CategoryTotal.TotalWhiteRaceArrested}}</td>
+                <td>{{UCRReport.MotorVehicleTheft.CategoryTotal.TotalBlackRaceArrested}}</td>
+                <td>{{UCRReport.MotorVehicleTheft.CategoryTotal.TotalIndianRaceArrested}}</td>
+                <td>{{UCRReport.MotorVehicleTheft.CategoryTotal.TotalOrientalRaceArrested}}</td>
+            </tr>
+            <tr>
+                <td class="textLeftAlign"><b>{{UCRReport.KidnapOrAbduction.CategoryTotal.Description}}</b></td>
+                <td>{{UCRReport.KidnapOrAbduction.CategoryTotal.TotalArrested}}</td>
+                <td>{{UCRReport.KidnapOrAbduction.CategoryTotal.TotalJuvenilesArrested}}</td>
+                <td>{{UCRReport.KidnapOrAbduction.CategoryTotal.TotalMaleJuvenilesArrested}}</td>
+                <td>{{UCRReport.KidnapOrAbduction.CategoryTotal.TotalFemaleJuvenilesArrested}}</td>
+                <td>{{UCRReport.KidnapOrAbduction.CategoryTotal.TotalAdultsArrested}}</td>
+                <td>{{UCRReport.KidnapOrAbduction.CategoryTotal.TotalMaleAdultsArrested}}</td>
+                <td>{{UCRReport.KidnapOrAbduction.CategoryTotal.TotalFemaleAdultsArrested}}</td>
+                <td>{{UCRReport.KidnapOrAbduction.CategoryTotal.TotalWhiteRaceArrested}}</td>
+                <td>{{UCRReport.KidnapOrAbduction.CategoryTotal.TotalBlackRaceArrested}}</td>
+                <td>{{UCRReport.KidnapOrAbduction.CategoryTotal.TotalIndianRaceArrested}}</td>
+                <td>{{UCRReport.KidnapOrAbduction.CategoryTotal.TotalOrientalRaceArrested}}</td>
+            </tr>
+            <tr>
+                <td class="textLeftAlign"><b>{{UCRReport.Arson.CategoryTotal.Description}}</b></td>
+                <td>{{UCRReport.Arson.CategoryTotal.TotalArrested}}</td>
+                <td>{{UCRReport.Arson.CategoryTotal.TotalJuvenilesArrested}}</td>
+                <td>{{UCRReport.Arson.CategoryTotal.TotalMaleJuvenilesArrested}}</td>
+                <td>{{UCRReport.Arson.CategoryTotal.TotalFemaleJuvenilesArrested}}</td>
+                <td>{{UCRReport.Arson.CategoryTotal.TotalAdultsArrested}}</td>
+                <td>{{UCRReport.Arson.CategoryTotal.TotalMaleAdultsArrested}}</td>
+                <td>{{UCRReport.Arson.CategoryTotal.TotalFemaleAdultsArrested}}</td>
+                <td>{{UCRReport.Arson.CategoryTotal.TotalWhiteRaceArrested}}</td>
+                <td>{{UCRReport.Arson.CategoryTotal.TotalBlackRaceArrested}}</td>
+                <td>{{UCRReport.Arson.CategoryTotal.TotalIndianRaceArrested}}</td>
+                <td>{{UCRReport.Arson.CategoryTotal.TotalOrientalRaceArrested}}</td>
+            </tr>
+            <tr>
+                <td class="textLeftAlign"><b>{{UCRReport.SimpleAssault.CategoryTotal.Description}}</b></td>
+                <td>{{UCRReport.SimpleAssault.CategoryTotal.TotalArrested}}</td>
+                <td>{{UCRReport.SimpleAssault.CategoryTotal.TotalJuvenilesArrested}}</td>
+                <td>{{UCRReport.SimpleAssault.CategoryTotal.TotalMaleJuvenilesArrested}}</td>
+                <td>{{UCRReport.SimpleAssault.CategoryTotal.TotalFemaleJuvenilesArrested}}</td>
+                <td>{{UCRReport.SimpleAssault.CategoryTotal.TotalAdultsArrested}}</td>
+                <td>{{UCRReport.SimpleAssault.CategoryTotal.TotalMaleAdultsArrested}}</td>
+                <td>{{UCRReport.SimpleAssault.CategoryTotal.TotalFemaleAdultsArrested}}</td>
+                <td>{{UCRReport.SimpleAssault.CategoryTotal.TotalWhiteRaceArrested}}</td>
+                <td>{{UCRReport.SimpleAssault.CategoryTotal.TotalBlackRaceArrested}}</td>
+                <td>{{UCRReport.SimpleAssault.CategoryTotal.TotalIndianRaceArrested}}</td>
+                <td>{{UCRReport.SimpleAssault.CategoryTotal.TotalOrientalRaceArrested}}</td>
+            </tr>
+            <tr>
+                <td style="text-align:left"><b>{{UCRReport.SimpleStalking.CategoryTotal.Description}}</b></td>
+                <td>{{UCRReport.SimpleStalking.CategoryTotal.TotalArrested}}</td>
+                <td>{{UCRReport.SimpleStalking.CategoryTotal.TotalJuvenilesArrested}}</td>
+                <td>{{UCRReport.SimpleStalking.CategoryTotal.TotalMaleJuvenilesArrested}}</td>
+                <td>{{UCRReport.SimpleStalking.CategoryTotal.TotalFemaleJuvenilesArrested}}</td>
+                <td>{{UCRReport.SimpleStalking.CategoryTotal.TotalAdultsArrested}}</td>
+                <td>{{UCRReport.SimpleStalking.CategoryTotal.TotalMaleAdultsArrested}}</td>
+                <td>{{UCRReport.SimpleStalking.CategoryTotal.TotalFemaleAdultsArrested}}</td>
+                <td>{{UCRReport.SimpleStalking.CategoryTotal.TotalWhiteRaceArrested}}</td>
+                <td>{{UCRReport.SimpleStalking.CategoryTotal.TotalBlackRaceArrested}}</td>
+                <td>{{UCRReport.SimpleStalking.CategoryTotal.TotalIndianRaceArrested}}</td>
+                <td>{{UCRReport.SimpleStalking.CategoryTotal.TotalOrientalRaceArrested}}</td>
+            </tr>
+            <tr>
+                <td class="textLeftAlign"><b>{{UCRReport.DrugsOrNarcoticsOffense.CategoryTotal.Description}}</b></td>
+                <td>{{UCRReport.DrugsOrNarcoticsOffense.CategoryTotal.TotalArrested}}</td>
+                <td>{{UCRReport.DrugsOrNarcoticsOffense.CategoryTotal.TotalJuvenilesArrested}}</td>
+                <td>{{UCRReport.DrugsOrNarcoticsOffense.CategoryTotal.TotalMaleJuvenilesArrested}}</td>
+                <td>{{UCRReport.DrugsOrNarcoticsOffense.CategoryTotal.TotalFemaleJuvenilesArrested}}</td>
+                <td>{{UCRReport.DrugsOrNarcoticsOffense.CategoryTotal.TotalAdultsArrested}}</td>
+                <td>{{UCRReport.DrugsOrNarcoticsOffense.CategoryTotal.TotalMaleAdultsArrested}}</td>
+                <td>{{UCRReport.DrugsOrNarcoticsOffense.CategoryTotal.TotalFemaleAdultsArrested}}</td>
+                <td>{{UCRReport.DrugsOrNarcoticsOffense.CategoryTotal.TotalWhiteRaceArrested}}</td>
+                <td>{{UCRReport.DrugsOrNarcoticsOffense.CategoryTotal.TotalBlackRaceArrested}}</td>
+                <td>{{UCRReport.DrugsOrNarcoticsOffense.CategoryTotal.TotalIndianRaceArrested}}</td>
+                <td>{{UCRReport.DrugsOrNarcoticsOffense.CategoryTotal.TotalOrientalRaceArrested}}</td>
+            </tr>
+            <tr ng-repeat="drugsOrNarcoticsOffense in UCRReport.DrugsOrNarcoticsOffense.CategoryArrestTypes">
+                <td class="textLeftAlignSpace">{{drugsOrNarcoticsOffense.Description}}</td>
+                <td>{{drugsOrNarcoticsOffense.TotalArrested}}</td>
+                <td>{{drugsOrNarcoticsOffense.TotalJuvenilesArrested}}</td>
+                <td>{{drugsOrNarcoticsOffense.TotalMaleJuvenilesArrested}}</td>
+                <td>{{drugsOrNarcoticsOffense.TotalFemaleJuvenilesArrested}}</td>
+                <td>{{drugsOrNarcoticsOffense.TotalAdultsArrested}}</td>
+                <td>{{drugsOrNarcoticsOffense.TotalMaleAdultsArrested}}</td>
+                <td>{{drugsOrNarcoticsOffense.TotalFemaleAdultsArrested}}</td>
+                <td>{{drugsOrNarcoticsOffense.TotalWhiteRaceArrested}}</td>
+                <td>{{drugsOrNarcoticsOffense.TotalBlackRaceArrested}}</td>
+                <td>{{drugsOrNarcoticsOffense.TotalIndianRaceArrested}}</td>
+                <td>{{drugsOrNarcoticsOffense.TotalOrientalRaceArrested}}</td>
+            </tr>
+        </table>
+        <br />
+        <div class="bigSpaceBottom">
+            <div class="third">
+                <div>
+                    <label class="bigLabel">Agency Name</label>
+                    <span class="underlinedText">{{UCRReport.AgencyName}}</span>
+                </div>
+            </div>
+            <div class="third">
+                <div>
+                    <label class="bigLabel">Agency ORI</label>
+                    <span class="underlinedText">{{UCRReport.AgencyORI}}</span>
+                </div>
+            </div>
+            <div class="third">
+                <div>
+                    <label class="bigLabel">Reporting Period</label>
+                    <span class="underlinedText">{{UCRReport.BeginReportingPeriod | date}} - {{UCRReport.EndReportingPeriod | date}}</span>
+                </div>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+    </div>
+
+    <div id="reportPageTwo" class="reportPage">
+        <h2 style="text-align: center;">Uniform Crime Reports Arrest Form</h2>
+
+        <table style="width: 1200px;">
+            <tr>
+                <td><b>Offense</b></td>
+                <td><b>Total Arrested</b></td>
+                <td colspan="3"><b>Juveniles</b></td>
+                <td colspan="3"><b>Adults</b></td>
+                <td colspan="4"><b>Race</b></td>
+            </tr>
+            <tr>
+                <td><b>=================</b></td>
+                <td><b>======</b></td>
+                <td><b>Total</b></td>
+                <td><b>Male</b></td>
+                <td><b>Female</b></td>
+                <td><b>Total</b></td>
+                <td><b>Male</b></td>
+                <td><b>Female</b></td>
+                <td><b>White</b></td>
+                <td><b>Black</b></td>
+                <td><b>Indian</b></td>
+                <td><b>Oriental</b></td>
+            </tr>
+            <tr>
+                <td class="textLeftAlign"><b>{{UCRReport.Bribery.CategoryTotal.Description}}</b></td>
+                <td>{{UCRReport.Bribery.CategoryTotal.TotalArrested}}</td>
+                <td>{{UCRReport.Bribery.CategoryTotal.TotalJuvenilesArrested}}</td>
+                <td>{{UCRReport.Bribery.CategoryTotal.TotalMaleJuvenilesArrested}}</td>
+                <td>{{UCRReport.Bribery.CategoryTotal.TotalFemaleJuvenilesArrested}}</td>
+                <td>{{UCRReport.Bribery.CategoryTotal.TotalAdultsArrested}}</td>
+                <td>{{UCRReport.Bribery.CategoryTotal.TotalMaleAdultsArrested}}</td>
+                <td>{{UCRReport.Bribery.CategoryTotal.TotalFemaleAdultsArrested}}</td>
+                <td>{{UCRReport.Bribery.CategoryTotal.TotalWhiteRaceArrested}}</td>
+                <td>{{UCRReport.Bribery.CategoryTotal.TotalBlackRaceArrested}}</td>
+                <td>{{UCRReport.Bribery.CategoryTotal.TotalIndianRaceArrested}}</td>
+                <td>{{UCRReport.Bribery.CategoryTotal.TotalOrientalRaceArrested}}</td>
+            </tr>
+            <tr>
+                <td class="textLeftAlign"><b>{{UCRReport.Embezzlement.CategoryTotal.Description}}</b></td>
+                <td>{{UCRReport.Embezzlement.CategoryTotal.TotalArrested}}</td>
+                <td>{{UCRReport.Embezzlement.CategoryTotal.TotalJuvenilesArrested}}</td>
+                <td>{{UCRReport.Embezzlement.CategoryTotal.TotalMaleJuvenilesArrested}}</td>
+                <td>{{UCRReport.Embezzlement.CategoryTotal.TotalFemaleJuvenilesArrested}}</td>
+                <td>{{UCRReport.Embezzlement.CategoryTotal.TotalAdultsArrested}}</td>
+                <td>{{UCRReport.Embezzlement.CategoryTotal.TotalMaleAdultsArrested}}</td>
+                <td>{{UCRReport.Embezzlement.CategoryTotal.TotalFemaleAdultsArrested}}</td>
+                <td>{{UCRReport.Embezzlement.CategoryTotal.TotalWhiteRaceArrested}}</td>
+                <td>{{UCRReport.Embezzlement.CategoryTotal.TotalBlackRaceArrested}}</td>
+                <td>{{UCRReport.Embezzlement.CategoryTotal.TotalIndianRaceArrested}}</td>
+                <td>{{UCRReport.Embezzlement.CategoryTotal.TotalOrientalRaceArrested}}</td>
+            </tr>
+            <tr>
+                <td class="textLeftAlign"><b>{{UCRReport.Fraud.CategoryTotal.Description}}</b></td>
+                <td>{{UCRReport.Fraud.CategoryTotal.TotalArrested}}</td>
+                <td>{{UCRReport.Fraud.CategoryTotal.TotalJuvenilesArrested}}</td>
+                <td>{{UCRReport.Fraud.CategoryTotal.TotalMaleJuvenilesArrested}}</td>
+                <td>{{UCRReport.Fraud.CategoryTotal.TotalFemaleJuvenilesArrested}}</td>
+                <td>{{UCRReport.Fraud.CategoryTotal.TotalAdultsArrested}}</td>
+                <td>{{UCRReport.Fraud.CategoryTotal.TotalMaleAdultsArrested}}</td>
+                <td>{{UCRReport.Fraud.CategoryTotal.TotalFemaleAdultsArrested}}</td>
+                <td>{{UCRReport.Fraud.CategoryTotal.TotalWhiteRaceArrested}}</td>
+                <td>{{UCRReport.Fraud.CategoryTotal.TotalBlackRaceArrested}}</td>
+                <td>{{UCRReport.Fraud.CategoryTotal.TotalIndianRaceArrested}}</td>
+                <td>{{UCRReport.Fraud.CategoryTotal.TotalOrientalRaceArrested}}</td>
+            </tr>
+            <tr ng-repeat="fraud in UCRReport.Fraud.CategoryArrestTypes">
+                <td class="textLeftAlignSpace">{{fraud.Description}}</td>
+                <td>{{fraud.TotalArrested}}</td>
+                <td>{{fraud.TotalJuvenilesArrested}}</td>
+                <td>{{fraud.TotalMaleJuvenilesArrested}}</td>
+                <td>{{fraud.TotalFemaleJuvenilesArrested}}</td>
+                <td>{{fraud.TotalAdultsArrested}}</td>
+                <td>{{fraud.TotalMaleAdultsArrested}}</td>
+                <td>{{fraud.TotalFemaleAdultsArrested}}</td>
+                <td>{{fraud.TotalWhiteRaceArrested}}</td>
+                <td>{{fraud.TotalBlackRaceArrested}}</td>
+                <td>{{fraud.TotalIndianRaceArrested}}</td>
+                <td>{{fraud.TotalOrientalRaceArrested}}</td>
+            </tr>
+            <tr>
+                <td class="textLeftAlign"><b>{{UCRReport.CounterfeitOrForgery.CategoryTotal.Description}}</b></td>
+                <td>{{UCRReport.CounterfeitOrForgery.CategoryTotal.TotalArrested}}</td>
+                <td>{{UCRReport.CounterfeitOrForgery.CategoryTotal.TotalJuvenilesArrested}}</td>
+                <td>{{UCRReport.CounterfeitOrForgery.CategoryTotal.TotalMaleJuvenilesArrested}}</td>
+                <td>{{UCRReport.CounterfeitOrForgery.CategoryTotal.TotalFemaleJuvenilesArrested}}</td>
+                <td>{{UCRReport.CounterfeitOrForgery.CategoryTotal.TotalAdultsArrested}}</td>
+                <td>{{UCRReport.CounterfeitOrForgery.CategoryTotal.TotalMaleAdultsArrested}}</td>
+                <td>{{UCRReport.CounterfeitOrForgery.CategoryTotal.TotalFemaleAdultsArrested}}</td>
+                <td>{{UCRReport.CounterfeitOrForgery.CategoryTotal.TotalWhiteRaceArrested}}</td>
+                <td>{{UCRReport.CounterfeitOrForgery.CategoryTotal.TotalBlackRaceArrested}}</td>
+                <td>{{UCRReport.CounterfeitOrForgery.CategoryTotal.TotalIndianRaceArrested}}</td>
+                <td>{{UCRReport.CounterfeitOrForgery.CategoryTotal.TotalOrientalRaceArrested}}</td>
+            </tr>
+            <tr>
+                <td class="textLeftAlign"><b>{{UCRReport.ExtortionOrBlackmail.CategoryTotal.Description}}</b></td>
+                <td>{{UCRReport.ExtortionOrBlackmail.CategoryTotal.TotalArrested}}</td>
+                <td>{{UCRReport.ExtortionOrBlackmail.CategoryTotal.TotalJuvenilesArrested}}</td>
+                <td>{{UCRReport.ExtortionOrBlackmail.CategoryTotal.TotalMaleJuvenilesArrested}}</td>
+                <td>{{UCRReport.ExtortionOrBlackmail.CategoryTotal.TotalFemaleJuvenilesArrested}}</td>
+                <td>{{UCRReport.ExtortionOrBlackmail.CategoryTotal.TotalAdultsArrested}}</td>
+                <td>{{UCRReport.ExtortionOrBlackmail.CategoryTotal.TotalMaleAdultsArrested}}</td>
+                <td>{{UCRReport.ExtortionOrBlackmail.CategoryTotal.TotalFemaleAdultsArrested}}</td>
+                <td>{{UCRReport.ExtortionOrBlackmail.CategoryTotal.TotalWhiteRaceArrested}}</td>
+                <td>{{UCRReport.ExtortionOrBlackmail.CategoryTotal.TotalBlackRaceArrested}}</td>
+                <td>{{UCRReport.ExtortionOrBlackmail.CategoryTotal.TotalIndianRaceArrested}}</td>
+                <td>{{UCRReport.ExtortionOrBlackmail.CategoryTotal.TotalOrientalRaceArrested}}</td>
+            </tr>
+            <tr>
+                <td class="textLeftAlign"><b>{{UCRReport.Intimidation.CategoryTotal.Description}}</b></td>
+                <td>{{UCRReport.Intimidation.CategoryTotal.TotalArrested}}</td>
+                <td>{{UCRReport.Intimidation.CategoryTotal.TotalJuvenilesArrested}}</td>
+                <td>{{UCRReport.Intimidation.CategoryTotal.TotalMaleJuvenilesArrested}}</td>
+                <td>{{UCRReport.Intimidation.CategoryTotal.TotalFemaleJuvenilesArrested}}</td>
+                <td>{{UCRReport.Intimidation.CategoryTotal.TotalAdultsArrested}}</td>
+                <td>{{UCRReport.Intimidation.CategoryTotal.TotalMaleAdultsArrested}}</td>
+                <td>{{UCRReport.Intimidation.CategoryTotal.TotalFemaleAdultsArrested}}</td>
+                <td>{{UCRReport.Intimidation.CategoryTotal.TotalWhiteRaceArrested}}</td>
+                <td>{{UCRReport.Intimidation.CategoryTotal.TotalBlackRaceArrested}}</td>
+                <td>{{UCRReport.Intimidation.CategoryTotal.TotalIndianRaceArrested}}</td>
+                <td>{{UCRReport.Intimidation.CategoryTotal.TotalOrientalRaceArrested}}</td>
+            </tr>
+            <tr>
+                <td class="textLeftAlign"><b>{{UCRReport.Prostitution.CategoryTotal.Description}}</b></td>
+                <td>{{UCRReport.Prostitution.CategoryTotal.TotalArrested}}</td>
+                <td>{{UCRReport.Prostitution.CategoryTotal.TotalJuvenilesArrested}}</td>
+                <td>{{UCRReport.Prostitution.CategoryTotal.TotalMaleJuvenilesArrested}}</td>
+                <td>{{UCRReport.Prostitution.CategoryTotal.TotalFemaleJuvenilesArrested}}</td>
+                <td>{{UCRReport.Prostitution.CategoryTotal.TotalAdultsArrested}}</td>
+                <td>{{UCRReport.Prostitution.CategoryTotal.TotalMaleAdultsArrested}}</td>
+                <td>{{UCRReport.Prostitution.CategoryTotal.TotalFemaleAdultsArrested}}</td>
+                <td>{{UCRReport.Prostitution.CategoryTotal.TotalWhiteRaceArrested}}</td>
+                <td>{{UCRReport.Prostitution.CategoryTotal.TotalBlackRaceArrested}}</td>
+                <td>{{UCRReport.Prostitution.CategoryTotal.TotalIndianRaceArrested}}</td>
+                <td>{{UCRReport.Prostitution.CategoryTotal.TotalOrientalRaceArrested}}</td>
+            </tr>
+            <tr>
+                <td class="textLeftAlign"><b>{{UCRReport.NonForcedSexualOffense.CategoryTotal.Description}}</b></td>
+                <td>{{UCRReport.NonForcedSexualOffense.CategoryTotal.TotalArrested}}</td>
+                <td>{{UCRReport.NonForcedSexualOffense.CategoryTotal.TotalJuvenilesArrested}}</td>
+                <td>{{UCRReport.NonForcedSexualOffense.CategoryTotal.TotalMaleJuvenilesArrested}}</td>
+                <td>{{UCRReport.NonForcedSexualOffense.CategoryTotal.TotalFemaleJuvenilesArrested}}</td>
+                <td>{{UCRReport.NonForcedSexualOffense.CategoryTotal.TotalAdultsArrested}}</td>
+                <td>{{UCRReport.NonForcedSexualOffense.CategoryTotal.TotalMaleAdultsArrested}}</td>
+                <td>{{UCRReport.NonForcedSexualOffense.CategoryTotal.TotalFemaleAdultsArrested}}</td>
+                <td>{{UCRReport.NonForcedSexualOffense.CategoryTotal.TotalWhiteRaceArrested}}</td>
+                <td>{{UCRReport.NonForcedSexualOffense.CategoryTotal.TotalBlackRaceArrested}}</td>
+                <td>{{UCRReport.NonForcedSexualOffense.CategoryTotal.TotalIndianRaceArrested}}</td>
+                <td>{{UCRReport.NonForcedSexualOffense.CategoryTotal.TotalOrientalRaceArrested}}</td>
+            </tr>
+            <tr ng-repeat="nonForcedSexualOffense in UCRReport.NonForcedSexualOffense.CategoryArrestTypes">
+                <td class="textLeftAlignSpace">{{nonForcedSexualOffense.Description}}</td>
+                <td>{{nonForcedSexualOffense.TotalArrested}}</td>
+                <td>{{nonForcedSexualOffense.TotalJuvenilesArrested}}</td>
+                <td>{{nonForcedSexualOffense.TotalMaleJuvenilesArrested}}</td>
+                <td>{{nonForcedSexualOffense.TotalFemaleJuvenilesArrested}}</td>
+                <td>{{nonForcedSexualOffense.TotalAdultsArrested}}</td>
+                <td>{{nonForcedSexualOffense.TotalMaleAdultsArrested}}</td>
+                <td>{{nonForcedSexualOffense.TotalFemaleAdultsArrested}}</td>
+                <td>{{nonForcedSexualOffense.TotalWhiteRaceArrested}}</td>
+                <td>{{nonForcedSexualOffense.TotalBlackRaceArrested}}</td>
+                <td>{{nonForcedSexualOffense.TotalIndianRaceArrested}}</td>
+                <td>{{nonForcedSexualOffense.TotalOrientalRaceArrested}}</td>
+            </tr>
+            <tr>
+                <td class="textLeftAlign"><b>{{UCRReport.StolenProperty.CategoryTotal.Description}}</b></td>
+                <td>{{UCRReport.StolenProperty.CategoryTotal.TotalArrested}}</td>
+                <td>{{UCRReport.StolenProperty.CategoryTotal.TotalJuvenilesArrested}}</td>
+                <td>{{UCRReport.StolenProperty.CategoryTotal.TotalMaleJuvenilesArrested}}</td>
+                <td>{{UCRReport.StolenProperty.CategoryTotal.TotalFemaleJuvenilesArrested}}</td>
+                <td>{{UCRReport.StolenProperty.CategoryTotal.TotalAdultsArrested}}</td>
+                <td>{{UCRReport.StolenProperty.CategoryTotal.TotalMaleAdultsArrested}}</td>
+                <td>{{UCRReport.StolenProperty.CategoryTotal.TotalFemaleAdultsArrested}}</td>
+                <td>{{UCRReport.StolenProperty.CategoryTotal.TotalWhiteRaceArrested}}</td>
+                <td>{{UCRReport.StolenProperty.CategoryTotal.TotalBlackRaceArrested}}</td>
+                <td>{{UCRReport.StolenProperty.CategoryTotal.TotalIndianRaceArrested}}</td>
+                <td>{{UCRReport.StolenProperty.CategoryTotal.TotalOrientalRaceArrested}}</td>
+            </tr>
+            <tr>
+                <td class="textLeftAlign"><b>{{UCRReport.DUI.CategoryTotal.Description}}</b></td>
+                <td>{{UCRReport.DUI.CategoryTotal.TotalArrested}}</td>
+                <td>{{UCRReport.DUI.CategoryTotal.TotalJuvenilesArrested}}</td>
+                <td>{{UCRReport.DUI.CategoryTotal.TotalMaleJuvenilesArrested}}</td>
+                <td>{{UCRReport.DUI.CategoryTotal.TotalFemaleJuvenilesArrested}}</td>
+                <td>{{UCRReport.DUI.CategoryTotal.TotalAdultsArrested}}</td>
+                <td>{{UCRReport.DUI.CategoryTotal.TotalMaleAdultsArrested}}</td>
+                <td>{{UCRReport.DUI.CategoryTotal.TotalFemaleAdultsArrested}}</td>
+                <td>{{UCRReport.DUI.CategoryTotal.TotalWhiteRaceArrested}}</td>
+                <td>{{UCRReport.DUI.CategoryTotal.TotalBlackRaceArrested}}</td>
+                <td>{{UCRReport.DUI.CategoryTotal.TotalIndianRaceArrested}}</td>
+                <td>{{UCRReport.DUI.CategoryTotal.TotalOrientalRaceArrested}}</td>
+            </tr>
+            <tr>
+                <td class="textLeftAlign"><b>{{UCRReport.DestructionOrDamage.CategoryTotal.Description}}</b></td>
+                <td>{{UCRReport.DestructionOrDamage.CategoryTotal.TotalArrested}}</td>
+                <td>{{UCRReport.DestructionOrDamage.CategoryTotal.TotalJuvenilesArrested}}</td>
+                <td>{{UCRReport.DestructionOrDamage.CategoryTotal.TotalMaleJuvenilesArrested}}</td>
+                <td>{{UCRReport.DestructionOrDamage.CategoryTotal.TotalFemaleJuvenilesArrested}}</td>
+                <td>{{UCRReport.DestructionOrDamage.CategoryTotal.TotalAdultsArrested}}</td>
+                <td>{{UCRReport.DestructionOrDamage.CategoryTotal.TotalMaleAdultsArrested}}</td>
+                <td>{{UCRReport.DestructionOrDamage.CategoryTotal.TotalFemaleAdultsArrested}}</td>
+                <td>{{UCRReport.DestructionOrDamage.CategoryTotal.TotalWhiteRaceArrested}}</td>
+                <td>{{UCRReport.DestructionOrDamage.CategoryTotal.TotalBlackRaceArrested}}</td>
+                <td>{{UCRReport.DestructionOrDamage.CategoryTotal.TotalIndianRaceArrested}}</td>
+                <td>{{UCRReport.DestructionOrDamage.CategoryTotal.TotalOrientalRaceArrested}}</td>
+            </tr>
+            <tr>
+                <td class="textLeftAlign"><b>{{UCRReport.Gambling.CategoryTotal.Description}}</b></td>
+                <td>{{UCRReport.Gambling.CategoryTotal.TotalArrested}}</td>
+                <td>{{UCRReport.Gambling.CategoryTotal.TotalJuvenilesArrested}}</td>
+                <td>{{UCRReport.Gambling.CategoryTotal.TotalMaleJuvenilesArrested}}</td>
+                <td>{{UCRReport.Gambling.CategoryTotal.TotalFemaleJuvenilesArrested}}</td>
+                <td>{{UCRReport.Gambling.CategoryTotal.TotalAdultsArrested}}</td>
+                <td>{{UCRReport.Gambling.CategoryTotal.TotalMaleAdultsArrested}}</td>
+                <td>{{UCRReport.Gambling.CategoryTotal.TotalFemaleAdultsArrested}}</td>
+                <td>{{UCRReport.Gambling.CategoryTotal.TotalWhiteRaceArrested}}</td>
+                <td>{{UCRReport.Gambling.CategoryTotal.TotalBlackRaceArrested}}</td>
+                <td>{{UCRReport.Gambling.CategoryTotal.TotalIndianRaceArrested}}</td>
+                <td>{{UCRReport.Gambling.CategoryTotal.TotalOrientalRaceArrested}}</td>
+            </tr>
+            <tr>
+                <td class="textLeftAlign"><b>{{UCRReport.WeaponsViolations.CategoryTotal.Description}}</b></td>
+                <td>{{UCRReport.WeaponsViolations.CategoryTotal.TotalArrested}}</td>
+                <td>{{UCRReport.WeaponsViolations.CategoryTotal.TotalJuvenilesArrested}}</td>
+                <td>{{UCRReport.WeaponsViolations.CategoryTotal.TotalMaleJuvenilesArrested}}</td>
+                <td>{{UCRReport.WeaponsViolations.CategoryTotal.TotalFemaleJuvenilesArrested}}</td>
+                <td>{{UCRReport.WeaponsViolations.CategoryTotal.TotalAdultsArrested}}</td>
+                <td>{{UCRReport.WeaponsViolations.CategoryTotal.TotalMaleAdultsArrested}}</td>
+                <td>{{UCRReport.WeaponsViolations.CategoryTotal.TotalFemaleAdultsArrested}}</td>
+                <td>{{UCRReport.WeaponsViolations.CategoryTotal.TotalWhiteRaceArrested}}</td>
+                <td>{{UCRReport.WeaponsViolations.CategoryTotal.TotalBlackRaceArrested}}</td>
+                <td>{{UCRReport.WeaponsViolations.CategoryTotal.TotalIndianRaceArrested}}</td>
+                <td>{{UCRReport.WeaponsViolations.CategoryTotal.TotalOrientalRaceArrested}}</td>
+            </tr>
+            <tr>
+                <td class="textLeftAlign"><b>{{UCRReport.LiquorLawViolations.CategoryTotal.Description}}</b></td>
+                <td>{{UCRReport.LiquorLawViolations.CategoryTotal.TotalArrested}}</td>
+                <td>{{UCRReport.LiquorLawViolations.CategoryTotal.TotalJuvenilesArrested}}</td>
+                <td>{{UCRReport.LiquorLawViolations.CategoryTotal.TotalMaleJuvenilesArrested}}</td>
+                <td>{{UCRReport.LiquorLawViolations.CategoryTotal.TotalFemaleJuvenilesArrested}}</td>
+                <td>{{UCRReport.LiquorLawViolations.CategoryTotal.TotalAdultsArrested}}</td>
+                <td>{{UCRReport.LiquorLawViolations.CategoryTotal.TotalMaleAdultsArrested}}</td>
+                <td>{{UCRReport.LiquorLawViolations.CategoryTotal.TotalFemaleAdultsArrested}}</td>
+                <td>{{UCRReport.LiquorLawViolations.CategoryTotal.TotalWhiteRaceArrested}}</td>
+                <td>{{UCRReport.LiquorLawViolations.CategoryTotal.TotalBlackRaceArrested}}</td>
+                <td>{{UCRReport.LiquorLawViolations.CategoryTotal.TotalIndianRaceArrested}}</td>
+                <td>{{UCRReport.LiquorLawViolations.CategoryTotal.TotalOrientalRaceArrested}}</td>
+            </tr>
+            <tr>
+                <td class="textLeftAlign"><b>{{UCRReport.Miscellaneous.CategoryTotal.Description}}</b></td>
+                <td>{{UCRReport.Miscellaneous.CategoryTotal.TotalArrested}}</td>
+                <td>{{UCRReport.Miscellaneous.CategoryTotal.TotalJuvenilesArrested}}</td>
+                <td>{{UCRReport.Miscellaneous.CategoryTotal.TotalMaleJuvenilesArrested}}</td>
+                <td>{{UCRReport.Miscellaneous.CategoryTotal.TotalFemaleJuvenilesArrested}}</td>
+                <td>{{UCRReport.Miscellaneous.CategoryTotal.TotalAdultsArrested}}</td>
+                <td>{{UCRReport.Miscellaneous.CategoryTotal.TotalMaleAdultsArrested}}</td>
+                <td>{{UCRReport.Miscellaneous.CategoryTotal.TotalFemaleAdultsArrested}}</td>
+                <td>{{UCRReport.Miscellaneous.CategoryTotal.TotalWhiteRaceArrested}}</td>
+                <td>{{UCRReport.Miscellaneous.CategoryTotal.TotalBlackRaceArrested}}</td>
+                <td>{{UCRReport.Miscellaneous.CategoryTotal.TotalIndianRaceArrested}}</td>
+                <td>{{UCRReport.Miscellaneous.CategoryTotal.TotalOrientalRaceArrested}}</td>
+            </tr>
+            <tr>
+                <td class="textLeftAlign"><b>{{UCRReport.Total.Description}}</b></td>
+                <td>{{UCRReport.Total.TotalArrested}}</td>
+                <td>{{UCRReport.Total.TotalJuvenilesArrested}}</td>
+                <td>{{UCRReport.Total.TotalMaleJuvenilesArrested}}</td>
+                <td>{{UCRReport.Total.TotalFemaleJuvenilesArrested}}</td>
+                <td>{{UCRReport.Total.TotalAdultsArrested}}</td>
+                <td>{{UCRReport.Total.TotalMaleAdultsArrested}}</td>
+                <td>{{UCRReport.Total.TotalFemaleAdultsArrested}}</td>
+                <td>{{UCRReport.Total.TotalWhiteRaceArrested}}</td>
+                <td>{{UCRReport.Total.TotalBlackRaceArrested}}</td>
+                <td>{{UCRReport.Total.TotalIndianRaceArrested}}</td>
+                <td>{{UCRReport.Total.TotalOrientalRaceArrested}}</td>
+            </tr>
+        </table>
+        <br />
+        <div class="bigSpaceBottom">
+            <div class="third">
+                <div class="center">
+                    <label class="bigLabel">Agency Name</label>
+                    <span class="underlinedText">{{UCRReport.AgencyName}}</span>
+                </div>
+            </div>
+            <div class="third">
+                <div class="center">
+                    <label class="bigLabel">Agency ORI</label>
+                    <span class="underlinedText">{{UCRReport.AgencyORI}}</span>
+                </div>
+            </div>
+            <div class="third">
+                <div class="center">
+                    <label class="bigLabel">Reporting Period</label>
+                    <span class="underlinedText">{{UCRReport.BeginReportingPeriod | date}} - {{UCRReport.EndReportingPeriod | date}}</span>
+                </div>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+        <br />
+        <br />
+    </div>
+</body>
