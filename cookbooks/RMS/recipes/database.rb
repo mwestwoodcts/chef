@@ -13,5 +13,14 @@ end
 sql_server_database_table 'ARR_AFSS' do
   connection sql_server_connection_info
   database_name 'Arrest'
+  schema_name 'dbo'
+  action     :create
+end
+
+sql_server_database_column 'Begin' do
+  connection sql_server_connection_info
+  database_name 'Arrest'
+  table_name 'ARR_AFSS'
+  schema_name 'dbo'
   action     :create
 end
