@@ -3,8 +3,7 @@
   "description" : "Standard install for developer machines",
   "run_list" : [
       "recipe[sql_server::server]",
-      "recipe[RMS::default]",
-      "recipe[Jail::default]"
+      "recipe[RMS::database]"
   ],
   "default_attributes" : {
       "sql_server": {

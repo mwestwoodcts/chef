@@ -19,7 +19,6 @@ end
 
 #Install the management console
 include_recipe "iis::mod_management"
-#include_recipe "iis::mod_isapi"
 include_recipe "iis::mod_aspnet"
 include_recipe "iis::mod_aspnet45"
 

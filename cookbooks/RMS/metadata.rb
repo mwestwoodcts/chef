@@ -7,3 +7,4 @@ long_description IO.read(File.join(File.dirname(__FILE__), 'README.md'))
 version          '9.4.0'
 supports         'windows'
 depends          'iis'
+depends          'database', '~> 4.0.5'
