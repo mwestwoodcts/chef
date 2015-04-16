@@ -16,9 +16,15 @@ class Chef
         def action_create
           unless exists?
             begin
-              Chef::Log.debug("#{@new_resource}: Creating column #{@new_resource.table_name}.dbo.#{new_resource.name}")
               db.execute("USE [#{@new_resource.database_name}]").do
-              db.execute("ALTER TABLE [#{@new_resource.table_name}] ADD [#{new_resource.name}] int NULL").do
+              alter_statement = "ALTER TABLE [#{@new_resource.table_name}] ADD [#{new_resource.name}]"
+              alter_statement += " #{@new_resource.type}"
+              unless @new_resource.size.nil?
+                alter_statement += "(#{@new_resource.size})"
+              end
+              alter_statement += " NULL"
+              Chef::Log.info("#{@new_resource}: Creating column #{@new_resource.table_name}.dbo.#{new_resource.name} with statement [#{alter_statement}]")
+              db.execute(alter_statement).do
               @new_resource.updated_by_last_action(true)
             ensure
               close

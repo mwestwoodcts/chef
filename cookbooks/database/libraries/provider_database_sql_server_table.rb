@@ -18,7 +18,7 @@ class Chef
             begin
               Chef::Log.debug("#{@new_resource}: Creating table #{new_resource.name}")
               db.execute("USE [#{@new_resource.database_name}]").do
-              db.execute("CREATE TABLE #{@new_resource.tablename}(UniqueKey int)").do
+              db.execute("CREATE TABLE #{@new_resource.tablename}(UniqueKey VARCHAR(22) NOT NULL)").do
               @new_resource.updated_by_last_action(true)
             ensure
               close

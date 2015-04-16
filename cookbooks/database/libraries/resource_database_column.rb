@@ -11,6 +11,8 @@ class Chef
         @database_name = nil
         @table_name = nil
         @schema_name = nil
+        @size = nil
+        @type = nil
 
         @allowed_actions.push(:create)
         @action = :create
@@ -35,6 +37,30 @@ class Chef
       def schema_name(arg = nil)
         set_or_return(
           :schema_name,
+          arg,
+          kind_of: String
+        )
+      end
+
+      def columnname(arg = nil)
+        set_or_return(
+          :columnname,
+          arg,
+          kind_of: String
+        )
+      end
+
+      def type(arg = nil)
+        set_or_return(
+          :type,
+          arg,
+          kind_of: String
+        )
+      end
+
+      def size(arg = nil)
+        set_or_return(
+          :size,
           arg,
           kind_of: String
         )

@@ -1,26 +1,3 @@
-sql_server_connection_info = {
-  :host     => '127.0.0.1',
-  :port     => node['sql_server']['port'],
-  :username => 'sa',
-  :password => node['sql_server']['server_sa_password']
-}
-
-sql_server_database 'Arrest' do
-  connection sql_server_connection_info
-  action     :create
-end
-
-sql_server_database_table 'ARR_AFSS' do
-  connection sql_server_connection_info
-  database_name 'Arrest'
-  schema_name 'dbo'
-  action     :create
-end
-
-sql_server_database_column 'Begin' do
-  connection sql_server_connection_info
-  database_name 'Arrest'
-  table_name 'ARR_AFSS'
-  schema_name 'dbo'
-  action     :create
-end
+include_recipe 'RMS::Arrest'
+include_recipe 'RMS::Arrest_dbo_ARR_AFSS'
+include_recipe 'RMS::Arrest_dbo_ARR_ATT'
