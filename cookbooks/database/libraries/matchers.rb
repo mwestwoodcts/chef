@@ -149,9 +149,21 @@ if defined?(ChefSpec)
     ChefSpec::Matchers::ResourceMatcher.new(:sql_server_database_user, :alter_roles, resource_name)
   end
 
-  # sql server database user
+  # sql server database table
   #
   def create_sql_server_database_table(resource_name)
     ChefSpec::Matchers::ResourceMatcher.new(:sql_server_database_table, :create, resource_name)
+  end
+
+  # sql server database column
+  #
+  def create_sql_server_database_column(resource_name)
+    ChefSpec::Matchers::ResourceMatcher.new(:sql_server_database_column, :create, resource_name)
+  end
+
+  # sql server database storedproc
+  #
+  def create_sql_server_database_proc(resource_name)
+    ChefSpec::Matchers::ResourceMatcher.new(:sql_server_database_proc, :create, resource_name)
   end
 end
