@@ -10,6 +10,7 @@ class Chef
 
         @database_name = nil
         @schema_name = nil
+        @file_loc = nil
 
         @allowed_actions.push(:create)
         @action = :create
@@ -34,6 +35,14 @@ class Chef
       def storedprocname(arg = nil)
         set_or_return(
           :storedprocname,
+          arg,
+          kind_of: String
+        )
+      end
+
+      def file_loc(arg = nil)
+        set_or_return(
+          :file_loc,
           arg,
           kind_of: String
         )

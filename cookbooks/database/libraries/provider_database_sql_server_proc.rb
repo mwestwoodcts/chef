@@ -14,15 +14,21 @@ class Chef
         end
 
         def action_create
-          unless exists?
-            begin
-              Chef::Log.debug("#{@new_resource}: Creating table #{new_resource.name}")
-              db.execute("USE [#{@new_resource.database_name}]").do
-              db.execute("CREATE TABLE #{@new_resource.storedprocname}(UniqueKey VARCHAR(22) NOT NULL)").do
+          Chef::Log.debug("#{@new_resource}: Creating stored proc #{new_resource.name}")
+            db.execute("USE [#{@new_resource.database_name}]").do
+          if exists?   
+            Chef::Log.info("Dropping #{@new_resource.storedprocname}")    
+            db.execute("DROP PROC #{@new_resource.storedprocname}").do
+          end
+          
+          begin           
+              script_file = "#{Chef::Config[:file_cache_path]}/cookbooks/#{@new_resource.file_loc}/files/default/#{@new_resource.database_name}/#{@new_resource.storedprocname}.sql"
+              Chef::Log.info("Loading script: #{script_file}")
+              script = ::File.open(script_file).read
+              db.execute("#{script}").do
               @new_resource.updated_by_last_action(true)
-            ensure
+          ensure
               close
-            end
           end
         end
 
@@ -30,7 +36,7 @@ class Chef
 
         def exists?
           db.execute("USE [#{@new_resource.database_name}]").do
-          result = db.execute("SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = '#{@new_resource.storedprocname}' AND TABLE_SCHEMA='#{@new_resource.schema_name}'")
+          result = db.execute("SELECT s.name SchemaName,o.name RoutineName, o.[type] RoutineType, procs.* FROM sys.sql_modules procs INNER JOIN sys.objects o ON procs.object_id = o.object_id INNER JOIN sys.schemas s ON o.schema_id = s.schema_id WHERE o.name = '#{@new_resource.storedprocname}' AND s.name = '#{@new_resource.schema_name}'")
           result.each.any?
         end
 

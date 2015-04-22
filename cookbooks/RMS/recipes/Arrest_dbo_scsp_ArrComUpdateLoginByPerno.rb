@@ -10,4 +10,5 @@ sql_server_database_proc 'scsp_ArrComUpdateLoginByPerno' do
   database_name 'Arrest'
   schema_name   'dbo'
   action        :create
+  file_loc      @cookbook_name
 end
