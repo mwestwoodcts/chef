@@ -14,21 +14,21 @@ class Chef
         end
 
         def action_create
-          Chef::Log.debug("#{@new_resource}: Creating stored proc #{new_resource.name}")
-            db.execute("USE [#{@new_resource.database_name}]").do
-          if exists?   
-            Chef::Log.info("Dropping #{@new_resource.storedprocname}")    
-            db.execute("DROP PROC #{@new_resource.storedprocname}").do
-          end
-          
-          begin           
-              script_file = "#{Chef::Config[:file_cache_path]}/cookbooks/#{@new_resource.file_loc}/files/default/#{@new_resource.database_name}/#{@new_resource.storedprocname}.sql"
-              Chef::Log.info("Loading script: #{script_file}")
-              script = ::File.open(script_file).read
-              db.execute("#{script}").do
-              @new_resource.updated_by_last_action(true)
+          begin
+            Chef::Log.debug("#{@new_resource}: Creating stored proc #{new_resource.name}")
+              db.execute("USE [#{@new_resource.database_name}]").do
+            if exists?   
+              Chef::Log.info("Dropping #{@new_resource.storedprocname}")    
+              db.execute("DROP PROC #{@new_resource.storedprocname}").do
+            end
+                     
+            script_file = "#{Chef::Config[:file_cache_path]}/cookbooks/#{@new_resource.file_loc}/files/default/#{@new_resource.database_name}/#{@new_resource.storedprocname}.sql"
+            Chef::Log.info("Loading script: #{script_file}")
+            script = ::File.open(script_file).read
+            db.execute("#{script}").do
+            @new_resource.updated_by_last_action(true)
           ensure
-              close
+            close
           end
         end
 
