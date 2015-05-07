@@ -9,7 +9,7 @@ class Chef
           Gem.clear_paths
           require 'tiny_tds'
           @current_resource = Chef::Resource::DatabaseColumn.new(@new_resource.name)
-          @current_resource.columnname(@new_resource.name)
+          @current_resource.columnname(@new_resource.columnname)
           @current_resource
         end
 
@@ -17,14 +17,26 @@ class Chef
           unless exists?
             begin
               db.execute("USE [#{@new_resource.database_name}]").do
-              alter_statement = "ALTER TABLE [#{@new_resource.table_name}] ADD [#{new_resource.name}]"
+              alter_statement = "ALTER TABLE [#{@new_resource.table_name}] ADD [#{new_resource.columnname}]"
               alter_statement += " #{@new_resource.type}"
               unless @new_resource.size.nil?
                 alter_statement += "(#{@new_resource.size})"
               end
-              alter_statement += " NULL"
-              Chef::Log.info("#{@new_resource}: Creating column #{@new_resource.table_name}.dbo.#{new_resource.name} with statement [#{alter_statement}]")
+              if @new_resource.null            
+                alter_statement += " NULL"
+              else
+                alter_statement += " NOT NULL"
+              end
+              unless @new_resource.constraint.nil?
+                alter_statement += " CONSTRAINT #{@new_resource.constraint}"
+              end
+              Chef::Log.info("#{@new_resource}: Creating column #{@new_resource.table_name}.dbo.#{new_resource.columnname} with statement [#{alter_statement}]")
               db.execute(alter_statement).do
+              unless @new_resource.description.nil?
+                description_statement = "EXEC sp_addextendedproperty N'MS_Description', N'#{@new_resource.description}', 'SCHEMA', N'dbo', 'TABLE', N'#{@new_resource.table_name}', 'COLUMN', N'#{new_resource.columnname}'"
+                Chef::Log.info("#{@new_resource}: Creating description for #{@new_resource.table_name}.dbo.#{new_resource.columnname} with statement [#{description_statement}]")
+                db.execute(description_statement).do
+              end
               @new_resource.updated_by_last_action(true)
             ensure
               close

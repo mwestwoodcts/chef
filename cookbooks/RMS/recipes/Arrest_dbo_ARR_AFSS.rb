@@ -12,521 +12,356 @@ sql_server_database_table 'ARR_AFSS' do
   action        :create
 end
 
-sql_server_database_column 'Begin' do
+sql_server_database_column 'Arrest.dbo.ARR_AFSS.Begin' do
   connection sql_server_connection_info
-  database_name 'Arrest'
-  table_name    'ARR_AFSS'
-  schema_name   'dbo'
   type          'VARCHAR'
   size          '10'
   action        :create
 end
 
-sql_server_database_column 'ARRESTNO' do
+sql_server_database_column 'Arrest.dbo.ARR_AFSS.ARRESTNO' do
   connection sql_server_connection_info
-  database_name 'Arrest'
-  table_name    'ARR_AFSS'
-  schema_name   'dbo'
   type          'VARCHAR'
   size          '15'
   action        :create
 end
 
-sql_server_database_column 'ARRESTNOB' do
+sql_server_database_column 'Arrest.dbo.ARR_AFSS.ARRESTNOB' do
   connection sql_server_connection_info
-  database_name 'Arrest'
-  table_name    'ARR_AFSS'
-  schema_name   'dbo'
   type          'VARCHAR'
   size          '15'
   action        :create
 end
 
-sql_server_database_column 'CHARGENUM' do
+sql_server_database_column 'Arrest.dbo.ARR_AFSS.CHARGENUM' do
   connection sql_server_connection_info
-  database_name 'Arrest'
-  table_name    'ARR_AFSS'
-  schema_name   'dbo'
   type          'int'
   action        :create
 end
 
-sql_server_database_column 'GOC' do
+sql_server_database_column 'Arrest.dbo.ARR_AFSS.GOC' do
   connection sql_server_connection_info
-  database_name 'Arrest'
-  table_name    'ARR_AFSS'
-  schema_name   'dbo'
   type          'VARCHAR'
   size          '1'
   action        :create
 end
 
-sql_server_database_column 'ACL' do
+sql_server_database_column 'Arrest.dbo.ARR_AFSS.ACL' do
   connection sql_server_connection_info
-  database_name 'Arrest'
-  table_name    'ARR_AFSS'
-  schema_name   'dbo'
   type          'VARCHAR'
   size          '1'
   action        :create
 end
 
-sql_server_database_column 'ACD' do
+sql_server_database_column 'Arrest.dbo.ARR_AFSS.ACD' do
   connection sql_server_connection_info
-  database_name 'Arrest'
-  table_name    'ARR_AFSS'
-  schema_name   'dbo'
   type          'VARCHAR'
   size          '1'
   action        :create
 end
 
-sql_server_database_column 'AON' do
+sql_server_database_column 'Arrest.dbo.ARR_AFSS.AON' do
   connection sql_server_connection_info
-  database_name 'Arrest'
-  table_name    'ARR_AFSS'
-  schema_name   'dbo'
   type          'VARCHAR'
   size          '4'
   action        :create
 end
 
-sql_server_database_column 'FSN' do
+sql_server_database_column 'Arrest.dbo.ARR_AFSS.FSN' do
   connection sql_server_connection_info
-  database_name 'Arrest'
-  table_name    'ARR_AFSS'
-  schema_name   'dbo'
   type          'VARCHAR'
   size          '30'
   action        :create
 end 
 
-sql_server_database_column 'COUNTS' do
+sql_server_database_column 'Arrest.dbo.ARR_AFSS.COUNTS' do
   connection sql_server_connection_info
-  database_name 'Arrest'
-  table_name    'ARR_AFSS'
-  schema_name   'dbo'
   type          'smallint'
   action        :create
 end
 
-sql_server_database_column 'FCICCODEV' do
+sql_server_database_column 'Arrest.dbo.ARR_AFSS.FCICCODEV' do
   connection sql_server_connection_info
-  database_name 'Arrest'
-  table_name    'ARR_AFSS'
-  schema_name   'dbo'
   type          'VARCHAR'
   size          '40'
   action        :create
 end 
 
-sql_server_database_column 'FSDESC' do
+sql_server_database_column 'Arrest.dbo.ARR_AFSS.FSDESC' do
   connection sql_server_connection_info
-  database_name 'Arrest'
-  table_name    'ARR_AFSS'
-  schema_name   'dbo'
   type          'VARCHAR'
   size          '200'
   action        :create
 end
 
-sql_server_database_column 'ADN' do
+sql_server_database_column 'Arrest.dbo.ARR_AFSS.ADN' do
   connection sql_server_connection_info
-  database_name 'Arrest'
-  table_name    'ARR_AFSS'
-  schema_name   'dbo'
   type          'VARCHAR'
   size          '3'
   action        :create
 end
 
-sql_server_database_column 'DV' do
+sql_server_database_column 'Arrest.dbo.ARR_AFSS.DV' do
   connection sql_server_connection_info
-  database_name 'Arrest'
-  table_name    'ARR_AFSS'
-  schema_name   'dbo'
   type          'bit'
   action        :create
 end
 
-sql_server_database_column 'HC' do
+sql_server_database_column 'Arrest.dbo.ARR_AFSS.HC' do
   connection sql_server_connection_info
-  database_name 'Arrest'
-  table_name    'ARR_AFSS'
-  schema_name   'dbo'
   type          'bit'
   action        :create
 end
 
-sql_server_database_column 'UCR' do
+sql_server_database_column 'Arrest.dbo.ARR_AFSS.UCR' do
   connection sql_server_connection_info
-  database_name 'Arrest'
-  table_name    'ARR_AFSS'
-  schema_name   'dbo'
   type          'VARCHAR'
   size          '4'
   action        :create
 end
 
-sql_server_database_column 'NCIC' do
+sql_server_database_column 'Arrest.dbo.ARR_AFSS.NCIC' do
   connection sql_server_connection_info
-  database_name 'Arrest'
-  table_name    'ARR_AFSS'
-  schema_name   'dbo'
   type          'VARCHAR'
   size          '4'
   action        :create
 end
 
-sql_server_database_column 'END' do
+sql_server_database_column 'Arrest.dbo.ARR_AFSS.END' do
   connection sql_server_connection_info
-  database_name 'Arrest'
-  table_name    'ARR_AFSS'
-  schema_name   'dbo'
   type          'VARCHAR'
   size          '10'
   action        :create
 end
 
-sql_server_database_column 'UCRTYPE' do
+sql_server_database_column 'Arrest.dbo.ARR_AFSS.UCRTYPE' do
   connection sql_server_connection_info
-  database_name 'Arrest'
-  table_name    'ARR_AFSS'
-  schema_name   'dbo'
   type          'int'
   action        :create
 end
 
-sql_server_database_column 'NIBRSTYPE' do
+sql_server_database_column 'Arrest.dbo.ARR_AFSS.NIBRSTYPE' do
   connection sql_server_connection_info
-  database_name 'Arrest'
-  table_name    'ARR_AFSS'
-  schema_name   'dbo'
   type          'int'
   action        :create
 end
 
-sql_server_database_column 'PRIORITY' do
+sql_server_database_column 'Arrest.dbo.ARR_AFSS.PRIORITY' do
   connection sql_server_connection_info
-  database_name 'Arrest'
-  table_name    'ARR_AFSS'
-  schema_name   'dbo'
   type          'int'
   action        :create
 end
 
-sql_server_database_column 'CriminalGangActivity1' do
+sql_server_database_column 'Arrest.dbo.ARR_AFSS.CriminalGangActivity1' do
   connection sql_server_connection_info
-  database_name 'Arrest'
-  table_name    'ARR_AFSS'
-  schema_name   'dbo'
   type          'int'
   action        :create
 end
 
-sql_server_database_column 'CriminalGangActivity2' do
+sql_server_database_column 'Arrest.dbo.ARR_AFSS.CriminalGangActivity2' do
   connection sql_server_connection_info
-  database_name 'Arrest'
-  table_name    'ARR_AFSS'
-  schema_name   'dbo'
   type          'int'
   action        :create
 end
 
-sql_server_database_column 'CriminalGangActivity3' do
+sql_server_database_column 'Arrest.dbo.ARR_AFSS.CriminalGangActivity3' do
   connection sql_server_connection_info
-  database_name 'Arrest'
-  table_name    'ARR_AFSS'
-  schema_name   'dbo'
   type          'int'
   action        :create
 end 
 
-sql_server_database_column 'LocationType' do
+sql_server_database_column 'Arrest.dbo.ARR_AFSS.LocationType' do
   connection sql_server_connection_info
-  database_name 'Arrest'
-  table_name    'ARR_AFSS'
-  schema_name   'dbo'
   type          'int'
   action        :create
 end
 
-sql_server_database_column 'FS' do
+sql_server_database_column 'Arrest.dbo.ARR_AFSS.FS' do
   connection sql_server_connection_info
-  database_name 'Arrest'
-  table_name    'ARR_AFSS'
-  schema_name   'dbo'
   type          'bit'
   action        :create
 end
 
-sql_server_database_column 'ORD' do
+sql_server_database_column 'Arrest.dbo.ARR_AFSS.ORD' do
   connection sql_server_connection_info
-  database_name 'Arrest'
-  table_name    'ARR_AFSS'
-  schema_name   'dbo'
   type          'bit'
   action        :create
 end
 
-sql_server_database_column 'ATTY_NO' do
+sql_server_database_column 'Arrest.dbo.ARR_AFSS.ATTY_NO' do
   connection sql_server_connection_info
-  database_name 'Arrest'
-  table_name    'ARR_AFSS'
-  schema_name   'dbo'
   type          'VARCHAR'
   size          '15'
   action        :create
 end
 
-sql_server_database_column 'COURT_NO' do
+sql_server_database_column 'Arrest.dbo.ARR_AFSS.COURT_NO' do
   connection sql_server_connection_info
-  database_name 'Arrest'
-  table_name    'ARR_AFSS'
-  schema_name   'dbo'
   type          'VARCHAR'
   size          '25'
   action        :create
 end
 
-sql_server_database_column 'CITATION' do
+sql_server_database_column 'Arrest.dbo.ARR_AFSS.CITATION' do
   connection sql_server_connection_info
-  database_name 'Arrest'
-  table_name    'ARR_AFSS'
-  schema_name   'dbo'
   type          'bit'
   action        :create
 end 
 
-sql_server_database_column 'WRITATT' do
+sql_server_database_column 'Arrest.dbo.ARR_AFSS.WRITATT' do
   connection sql_server_connection_info
-  database_name 'Arrest'
-  table_name    'ARR_AFSS'
-  schema_name   'dbo'
   type          'bit'
   action        :create
 end
 
-sql_server_database_column 'DOM_VIO_INJ' do
+sql_server_database_column 'Arrest.dbo.ARR_AFSS.DOM_VIO_INJ' do
   connection sql_server_connection_info
-  database_name 'Arrest'
-  table_name    'ARR_AFSS'
-  schema_name   'dbo'
   type          'bit'
   action        :create
 end
 
-sql_server_database_column 'ORDER_ARR' do
+sql_server_database_column 'Arrest.dbo.ARR_AFSS.ORDER_ARR' do
   connection sql_server_connection_info
-  database_name 'Arrest'
-  table_name    'ARR_AFSS'
-  schema_name   'dbo'
   type          'bit'
   action        :create
 end
 
-sql_server_database_column 'XMITSORTDATE' do
+sql_server_database_column 'Arrest.dbo.ARR_AFSS.XMITSORTDATE' do
   connection sql_server_connection_info
-  database_name 'Arrest'
-  table_name    'ARR_AFSS'
-  schema_name   'dbo'
   type          'VARCHAR'
   size          '19'
   action        :create
 end
 
-sql_server_database_column 'ARR_INDICATE' do
+sql_server_database_column 'Arrest.dbo.ARR_AFSS.ARR_INDICATE' do
   connection sql_server_connection_info
-  database_name 'Arrest'
-  table_name    'ARR_AFSS'
-  schema_name   'dbo'
   type          'int'
   action        :create
 end
 
-sql_server_database_column 'PC' do
+sql_server_database_column 'Arrest.dbo.ARR_AFSS.PC' do
   connection sql_server_connection_info
-  database_name 'Arrest'
-  table_name    'ARR_AFSS'
-  schema_name   'dbo'
   type          'bit'
   action        :create
 end
 
-sql_server_database_column 'CAPIAS' do
+sql_server_database_column 'Arrest.dbo.ARR_AFSS.CAPIAS' do
   connection sql_server_connection_info
-  database_name 'Arrest'
-  table_name    'ARR_AFSS'
-  schema_name   'dbo'
   type          'bit'
   action        :create
 end
 
-sql_server_database_column 'AC' do
+sql_server_database_column 'Arrest.dbo.ARR_AFSS.AC' do
   connection sql_server_connection_info
-  database_name 'Arrest'
-  table_name    'ARR_AFSS'
-  schema_name   'dbo'
   type          'bit'
   action        :create
 end
 
-sql_server_database_column 'BW' do
+sql_server_database_column 'Arrest.dbo.ARR_AFSS.BW' do
   connection sql_server_connection_info
-  database_name 'Arrest'
-  table_name    'ARR_AFSS'
-  schema_name   'dbo'
   type          'bit'
   action        :create
 end
 
-sql_server_database_column 'FW' do
+sql_server_database_column 'Arrest.dbo.ARR_AFSS.FW' do
   connection sql_server_connection_info
-  database_name 'Arrest'
-  table_name    'ARR_AFSS'
-  schema_name   'dbo'
   type          'bit'
   action        :create
 end
 
-sql_server_database_column 'PW' do
+sql_server_database_column 'Arrest.dbo.ARR_AFSS.PW' do
   connection sql_server_connection_info
-  database_name 'Arrest'
-  table_name    'ARR_AFSS'
-  schema_name   'dbo'
   type          'bit'
   action        :create
 end
 
-sql_server_database_column 'JUVPU' do
+sql_server_database_column 'Arrest.dbo.ARR_AFSS.JUVPU' do
   connection sql_server_connection_info
-  database_name 'Arrest'
-  table_name    'ARR_AFSS'
-  schema_name   'dbo'
   type          'bit'
   action        :create
 end
 
-sql_server_database_column 'ACTIVITY' do
+sql_server_database_column 'Arrest.dbo.ARR_AFSS.ACTIVITY' do
   connection sql_server_connection_info
-  database_name 'Arrest'
-  table_name    'ARR_AFSS'
-  schema_name   'dbo'
   type          'VARCHAR'
   size          '1'
   action        :create
 end 
 
-sql_server_database_column 'DRUGTYPE' do
+sql_server_database_column 'Arrest.dbo.ARR_AFSS.DRUGTYPE' do
   connection sql_server_connection_info
-  database_name 'Arrest'
-  table_name    'ARR_AFSS'
-  schema_name   'dbo'
   type          'VARCHAR'
   size          '1'
   action        :create
 end
 
-sql_server_database_column 'AMOUNT' do
+sql_server_database_column 'Arrest.dbo.ARR_AFSS.AMOUNT' do
   connection sql_server_connection_info
-  database_name 'Arrest'
-  table_name    'ARR_AFSS'
-  schema_name   'dbo'
   type          'VARCHAR'
   size          '30'
   action        :create
 end
 
-sql_server_database_column 'SECTION' do
+sql_server_database_column 'Arrest.dbo.ARR_AFSS.SECTION' do
   connection sql_server_connection_info
-  database_name 'Arrest'
-  table_name    'ARR_AFSS'
-  schema_name   'dbo'
   type          'VARCHAR'
   size          '15'
   action        :create
 end
 
-sql_server_database_column 'TRANSMITTED' do
+sql_server_database_column 'Arrest.dbo.ARR_AFSS.TRANSMITTED' do
   connection sql_server_connection_info
-  database_name 'Arrest'
-  table_name    'ARR_AFSS'
-  schema_name   'dbo'
   type          'bit'
   action        :create
 end
 
-sql_server_database_column 'DATE_ISSUED' do
+sql_server_database_column 'Arrest.dbo.ARR_AFSS.DATE_ISSUED' do
   connection sql_server_connection_info
-  database_name 'Arrest'
-  table_name    'ARR_AFSS'
-  schema_name   'dbo'
   type          'datetime'
   action        :create
 end
 
-sql_server_database_column 'BONDAMT' do
+sql_server_database_column 'Arrest.dbo.ARR_AFSS.BONDAMT' do
   connection sql_server_connection_info
-  database_name 'Arrest'
-  table_name    'ARR_AFSS'
-  schema_name   'dbo'
   type          'money'
   action        :create
 end
 
-sql_server_database_column 'FSS_RecNo' do
+sql_server_database_column 'Arrest.dbo.ARR_AFSS.FSS_RecNo' do
   connection sql_server_connection_info
-  database_name 'Arrest'
-  table_name    'ARR_AFSS'
-  schema_name   'dbo'
   type          'VARCHAR'
   size          '10'
   action        :create
 end
 
-sql_server_database_column 'ArrestReportUniqueFKey' do
+sql_server_database_column 'Arrest.dbo.ARR_AFSS.ArrestReportUniqueFKey' do
   connection sql_server_connection_info
-  database_name 'Arrest'
-  table_name    'ARR_AFSS'
-  schema_name   'dbo'
   type          'VARCHAR'
   size          '22'
   action        :create
 end
 
-sql_server_database_column 'CargoTheft' do
+sql_server_database_column 'Arrest.dbo.ARR_AFSS.CargoTheft' do
   connection sql_server_connection_info
-  database_name 'Arrest'
-  table_name    'ARR_AFSS'
-  schema_name   'dbo'
   type          'bit'
   action        :create
 end
 
-sql_server_database_column 'MentalHealth' do
+sql_server_database_column 'Arrest.dbo.ARR_AFSS.MentalHealth' do
   connection sql_server_connection_info
-  database_name 'Arrest'
-  table_name    'ARR_AFSS'
-  schema_name   'dbo'
   type          'bit'
   action        :create
 end
 
-sql_server_database_column 'WarrantNo' do
+sql_server_database_column 'Arrest.dbo.ARR_AFSS.WarrantNo' do
   connection sql_server_connection_info
-  database_name 'Arrest'
-  table_name    'ARR_AFSS'
-  schema_name   'dbo'
   type          'VARCHAR'
   size          '15'
   action        :create
 end
 
-sql_server_database_column 'ChargeProbableCause' do
+sql_server_database_column 'Arrest.dbo.ARR_AFSS.ChargeProbableCause' do
   connection sql_server_connection_info
-  database_name 'Arrest'
-  table_name    'ARR_AFSS'
-  schema_name   'dbo'
   type          'VARCHAR'
   size          'max'
   action        :create

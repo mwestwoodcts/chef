@@ -16,7 +16,7 @@ class Chef
         def action_create
           begin
             Chef::Log.debug("#{@new_resource}: Creating stored proc #{new_resource.name}")
-              db.execute("USE [#{@new_resource.database_name}]").do
+            db.execute("USE [#{@new_resource.database_name}]").do
             if exists?   
               Chef::Log.info("Dropping #{@new_resource.storedprocname}")    
               db.execute("DROP PROC #{@new_resource.storedprocname}").do

@@ -12,128 +12,89 @@ sql_server_database_table 'ARR_ATT' do
   action        :create
 end
 
-sql_server_database_column 'Begin' do
+sql_server_database_column 'Arrest.dbo.ARR_ATT.Begin' do
   connection sql_server_connection_info
-  database_name 'Arrest'
-  table_name    'ARR_ATT'
-  schema_name   'dbo'
   type          'VARCHAR'
   size          '10'
   action        :create
 end
 
-sql_server_database_column 'ARRESTNO' do
+sql_server_database_column 'Arrest.dbo.ARR_ATT.ARRESTNO' do
   connection sql_server_connection_info
-  database_name 'Arrest'
-  table_name    'ARR_ATT'
-  schema_name   'dbo'
   type          'VARCHAR'
   size          '15'
   action        :create
 end
 
-sql_server_database_column 'ARRESTNOB' do
+sql_server_database_column 'Arrest.dbo.ARR_ATT.ARRESTNOB' do
   connection sql_server_connection_info
-  database_name 'Arrest'
-  table_name    'ARR_ATT'
-  schema_name   'dbo'
   type          'VARCHAR'
   size          '15'
   action        :create
 end
 
-sql_server_database_column 'DATE' do
+sql_server_database_column 'Arrest.dbo.ARR_ATT.DATE' do
   connection sql_server_connection_info
-  database_name 'Arrest'
-  table_name    'ARR_ATT'
-  schema_name   'dbo'
   type          'datetime'
   action        :create
 end
 
-sql_server_database_column 'TIME' do
+sql_server_database_column 'Arrest.dbo.ARR_ATT.TIME' do
   connection sql_server_connection_info
-  database_name 'Arrest'
-  table_name    'ARR_ATT'
-  schema_name   'dbo'
   type          'VARCHAR'
   size          '5'
   action        :create
 end
 
-sql_server_database_column 'OFFICER' do
+sql_server_database_column 'Arrest.dbo.ARR_ATT.OFFICER' do
   connection sql_server_connection_info
-  database_name 'Arrest'
-  table_name    'ARR_ATT'
-  schema_name   'dbo'
   type          'VARCHAR'
   size          '40'
   action        :create
 end
 
-sql_server_database_column 'LOCATION' do
+sql_server_database_column 'Arrest.dbo.ARR_ATT.LOCATION' do
   connection sql_server_connection_info
-  database_name 'Arrest'
-  table_name    'ARR_ATT'
-  schema_name   'dbo'
   type          'VARCHAR'
   size          '100'
   action        :create
 end
 
-sql_server_database_column 'END' do
+sql_server_database_column 'Arrest.dbo.ARR_ATT.END' do
   connection sql_server_connection_info
-  database_name 'Arrest'
-  table_name    'ARR_ATT'
-  schema_name   'dbo'
   type          'VARCHAR'
   size          '10'
   action        :create
 end
 
-sql_server_database_column 'MNINo' do
+sql_server_database_column 'Arrest.dbo.ARR_ATT.MNINo' do
   connection sql_server_connection_info
-  database_name 'Arrest'
-  table_name    'ARR_ATT'
-  schema_name   'dbo'
   type          'VARCHAR'
   size          '15'
   action        :create
 end
 
-sql_server_database_column 'RESTRICTED' do
+sql_server_database_column 'Arrest.dbo.ARR_ATT.RESTRICTED' do
   connection sql_server_connection_info
-  database_name 'Arrest'
-  table_name    'ARR_ATT'
-  schema_name   'dbo'
   type          'bit'
   action        :create
 end
 
-sql_server_database_column 'ArrestReportUniqueFKey' do
+sql_server_database_column 'Arrest.dbo.ARR_ATT.ArrestReportUniqueFKey' do
   connection sql_server_connection_info
-  database_name 'Arrest'
-  table_name    'ARR_ATT'
-  schema_name   'dbo'
   type          'VARCHAR'
   size          '22'
   action        :create
 end
 
-sql_server_database_column 'AttemptDateTime' do
+sql_server_database_column 'Arrest.dbo.ARR_ATT.AttemptDateTime' do
   connection sql_server_connection_info
-  database_name 'Arrest'
-  table_name    'ARR_ATT'
-  schema_name   'dbo'
   type          'datetime'
   action        :create
 end
 
-sql_server_database_column 'ArrestReportPersonFKey' do
+sql_server_database_column 'Arrest.dbo.ARR_ATT.ArrestReportPersonFKey' do
   connection sql_server_connection_info
-  database_name 'Arrest'
-  table_name    'ARR_ATT'
-  schema_name   'dbo'
   type          'VARCHAR'
   size          '22'
   action        :create
