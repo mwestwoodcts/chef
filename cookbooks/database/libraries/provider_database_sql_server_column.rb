@@ -29,12 +29,17 @@ class Chef
               end
               unless @new_resource.constraint.nil?
                 alter_statement += " CONSTRAINT #{@new_resource.constraint}"
+                unless @new_resource.constraint.nil?       
+                  alter_statement += " DEFAULT ('#{@new_resource.default}')"
+                else
+                  alter_statement += " DEFAULT ('')"
+                end
               end
-              Chef::Log.info("#{@new_resource}: Creating column #{@new_resource.table_name}.dbo.#{new_resource.columnname} with statement [#{alter_statement}]")
+              Chef::Log.info("#{@new_resource}: Creating column #{@new_resource.table_name}.#{@new_resource.schema_name}.#{@new_resource.columnname} with statement [#{alter_statement}]")
               db.execute(alter_statement).do
               unless @new_resource.description.nil?
-                description_statement = "EXEC sp_addextendedproperty N'MS_Description', N'#{@new_resource.description}', 'SCHEMA', N'dbo', 'TABLE', N'#{@new_resource.table_name}', 'COLUMN', N'#{new_resource.columnname}'"
-                Chef::Log.info("#{@new_resource}: Creating description for #{@new_resource.table_name}.dbo.#{new_resource.columnname} with statement [#{description_statement}]")
+                description_statement = "EXEC sp_addextendedproperty N'MS_Description', N'#{@new_resource.description}', 'SCHEMA', N'#{@new_resource.schema_name}', 'TABLE', N'#{@new_resource.table_name}', 'COLUMN', N'#{new_resource.columnname}'"
+                Chef::Log.info("#{@new_resource}: Creating description for #{@new_resource.table_name}.#{@new_resource.schema_name}.#{@new_resource.columnname} with statement [#{description_statement}]")
                 db.execute(description_statement).do
               end
               @new_resource.updated_by_last_action(true)

@@ -16,6 +16,8 @@ class Chef
         @null = true
         @description = nil
         @constraint = nil
+        @default = nil
+        @collate = nil
         parseString(name)
 
         @allowed_actions.push(:create)
@@ -81,6 +83,22 @@ class Chef
       def constraint(arg = nil)
         set_or_return(
           :constraint,
+          arg,
+          kind_of: String
+        )
+      end
+
+      def default(arg = nil)
+        set_or_return(
+          :default,
+          arg,
+          kind_of: String
+        )
+      end
+
+      def collate(arg = nil)
+        set_or_return(
+          :collate,
           arg,
           kind_of: String
         )
